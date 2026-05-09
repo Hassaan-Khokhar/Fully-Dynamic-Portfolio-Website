@@ -1,29 +1,32 @@
 import type { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://hassaanali.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null)
+  || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
+  || "http://localhost:3000";
 
+export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: baseUrl,
+      url: siteUrl,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/#about`,
+      url: `${siteUrl}/#about`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#projects`,
+      url: `${siteUrl}/#projects`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/#contact`,
+      url: `${siteUrl}/#contact`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,

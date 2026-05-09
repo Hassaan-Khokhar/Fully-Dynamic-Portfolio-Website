@@ -128,7 +128,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content */}
-      <main className="admin-root flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8 min-w-0">
+      <main className="admin-root flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8 min-w-0 overflow-x-hidden">
         {/* Mobile Top Bar */}
         <div className="flex items-center gap-4 mb-6 lg:hidden">
           <button

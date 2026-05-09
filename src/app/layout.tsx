@@ -11,8 +11,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null)
+  || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
+  || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hassaanali.com"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Hassaan Ali (Hassaan Khokhar) | Full Stack Architect & Flutter Specialist",
     template: "%s | Hassaan Ali Portfolio",
@@ -48,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hassaan Ali | Full Stack Architect & Flutter Specialist",
     description: "Full Stack Developer & Flutter Engineer. Building robust backends and fluid mobile ecosystems. Explore my projects, skills, and experience.",
-    url: "https://hassaanali.com",
+    url: siteUrl,
     siteName: "Hassaan Ali Portfolio",
     images: [
       {
@@ -79,7 +84,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://hassaanali.com",
+    canonical: siteUrl,
   },
   verification: {
     // Add your Google Search Console verification code here when ready

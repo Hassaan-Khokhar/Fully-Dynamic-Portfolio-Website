@@ -398,14 +398,14 @@ export default function AdminProjectsPage() {
               transition={{ delay: i * 0.05 }}
               className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/[0.07] transition-all duration-300 group"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center">
+              <div className="flex items-center gap-4 min-w-0 flex-1">
+                <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center shrink-0">
                   <FolderKanban className="w-6 h-6 text-neon-blue" />
                 </div>
-                <div>
-                  <p className="text-white font-bold text-lg">{project.title}</p>
-                  <p className="text-white/40 text-sm mt-1 max-w-lg truncate">{project.description}</p>
-                  <div className="flex gap-2 mt-2">
+                <div className="min-w-0 flex-1">
+                  <p className="text-white font-bold text-lg truncate">{project.title}</p>
+                  <p className="text-white/40 text-sm mt-1 truncate">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {project.tags.map((tag) => (
                       <span key={tag} className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-white/50">
                         {tag}
