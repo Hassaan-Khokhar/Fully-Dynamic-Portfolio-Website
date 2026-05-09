@@ -54,7 +54,8 @@ export async function getPortfolioData() {
       hero_taglines: "Full Stack Developer, Flutter Engineer",
       hero_bio: "Computer Science student at COMSATS University Islamabad. Specialized in architecting robust database-driven backends and developing fluid, cross-platform mobile ecosystems.",
       hero_image: "",
-      resume_url: ""
+      resume_url: "",
+      about_text: ""
     },
   };
 }

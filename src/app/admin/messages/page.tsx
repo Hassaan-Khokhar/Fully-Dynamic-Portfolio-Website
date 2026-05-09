@@ -46,7 +46,8 @@ export default function MessagesPage() {
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-        <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 text-sm font-bold text-white/50 uppercase tracking-wider">
+        {/* Desktop Header - hidden on mobile */}
+        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 text-sm font-bold text-white/50 uppercase tracking-wider">
           <div className="col-span-1">Status</div>
           <div className="col-span-3">Name</div>
           <div className="col-span-4">Subject</div>
@@ -56,14 +57,29 @@ export default function MessagesPage() {
 
         {loading ? (
           <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-white/20" /></div>
-        ) : messages.map((msg, i) => (
-          <div key={msg.id} className="grid grid-cols-12 gap-4 px-6 py-5 border-b border-white/5 hover:bg-white/[0.03] transition-all duration-300 cursor-pointer items-center" onClick={() => handleOpenMessage(msg)}>
-            <div className="col-span-1">{msg.read ? <Mail className="w-5 h-5 text-white/30" /> : <MessageSquare className="w-5 h-5 text-neon-blue" />}</div>
-            <div className="col-span-3"><span className={`font-medium ${msg.read ? "text-white/50" : "text-white"}`}>{msg.name}</span></div>
-            <div className="col-span-4"><span className={`text-sm ${msg.read ? "text-white/40" : "text-white/70"}`}>{msg.subject}</span></div>
-            <div className="col-span-3 text-white/30 text-sm">{new Date(msg.created_at).toLocaleDateString()}</div>
-            <div className="col-span-1 flex justify-end">
-              <button onClick={(e) => { e.stopPropagation(); deleteMessage(msg.id); }} className="p-2 rounded-lg text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all"><Trash2 className="w-4 h-4" /></button>
+        ) : messages.map((msg) => (
+          <div key={msg.id} onClick={() => handleOpenMessage(msg)} className="cursor-pointer border-b border-white/5 hover:bg-white/[0.03] transition-all duration-300">
+            {/* Desktop Row */}
+            <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-5 items-center">
+              <div className="col-span-1">{msg.read ? <Mail className="w-5 h-5 text-white/30" /> : <MessageSquare className="w-5 h-5 text-neon-blue" />}</div>
+              <div className="col-span-3"><span className={`font-medium ${msg.read ? "text-white/50" : "text-white"}`}>{msg.name}</span></div>
+              <div className="col-span-4"><span className={`text-sm ${msg.read ? "text-white/40" : "text-white/70"}`}>{msg.subject}</span></div>
+              <div className="col-span-3 text-white/30 text-sm">{new Date(msg.created_at).toLocaleDateString()}</div>
+              <div className="col-span-1 flex justify-end">
+                <button onClick={(e) => { e.stopPropagation(); deleteMessage(msg.id); }} className="p-2 rounded-lg text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all"><Trash2 className="w-4 h-4" /></button>
+              </div>
+            </div>
+            {/* Mobile Card */}
+            <div className="md:hidden flex items-start gap-3 px-4 py-4">
+              <div className="shrink-0 mt-1">{msg.read ? <Mail className="w-5 h-5 text-white/30" /> : <MessageSquare className="w-5 h-5 text-neon-blue" />}</div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <span className={`font-medium truncate ${msg.read ? "text-white/50" : "text-white"}`}>{msg.name}</span>
+                  <span className="text-white/30 text-xs shrink-0">{new Date(msg.created_at).toLocaleDateString()}</span>
+                </div>
+                <p className={`text-sm truncate mt-1 ${msg.read ? "text-white/40" : "text-white/70"}`}>{msg.subject}</p>
+              </div>
+              <button onClick={(e) => { e.stopPropagation(); deleteMessage(msg.id); }} className="p-2 rounded-lg text-white/20 hover:text-red-400 shrink-0"><Trash2 className="w-4 h-4" /></button>
             </div>
           </div>
         ))}

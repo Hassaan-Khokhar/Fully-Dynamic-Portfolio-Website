@@ -4,7 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { LogIn, Lock, Mail, AlertCircle } from "lucide-react";
+import { LogIn, Lock, Mail, AlertCircle, ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -124,6 +124,13 @@ export default function LoginPage() {
         <p className="text-center mt-8 text-white/20 text-sm">
           Protected by Supabase Auth
         </p>
+        <a
+          href="/"
+          className="flex items-center justify-center gap-2 mt-4 text-white/30 hover:text-neon-blue text-sm font-medium transition-colors duration-300"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Portfolio
+        </a>
       </motion.div>
     </div>
   );

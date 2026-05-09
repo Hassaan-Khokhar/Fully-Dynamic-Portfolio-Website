@@ -29,6 +29,7 @@ export default function AdminSkillsPage() {
 
   const empty: SkillCategory = { id: "", title: "", icon: "code", skills: [], className: "md:col-span-1 md:row-span-1" };
   const [form, setForm] = useState<SkillCategory>(empty);
+  const [skillsRaw, setSkillsRaw] = useState("");
 
   useEffect(() => {
     fetchSkills();
@@ -51,16 +52,17 @@ export default function AdminSkillsPage() {
     setLoading(false);
   };
 
-  const handleEdit = (cat: SkillCategory) => { setEditing(cat); setForm(cat); setIsCreating(false); };
-  const handleCreate = () => { setIsCreating(true); setEditing(null); setForm(empty); };
-  const handleCancel = () => { setEditing(null); setIsCreating(false); setForm(empty); };
+  const handleEdit = (cat: SkillCategory) => { setEditing(cat); setForm(cat); setSkillsRaw(cat.skills.join(", ")); setIsCreating(false); };
+  const handleCreate = () => { setIsCreating(true); setEditing(null); setForm(empty); setSkillsRaw(""); };
+  const handleCancel = () => { setEditing(null); setIsCreating(false); setForm(empty); setSkillsRaw(""); };
 
   const handleSave = async () => {
     setIsSaving(true);
+    const parsedSkills = skillsRaw.split(",").map((s) => s.trim()).filter(Boolean);
     const dbData = {
       title: form.title,
       icon: form.icon,
-      skills: form.skills,
+      skills: parsedSkills,
       class_name: form.className,
     };
 
@@ -95,7 +97,7 @@ export default function AdminSkillsPage() {
 
       <AnimatePresence>
         {(isCreating || editing) && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-8 mb-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">{isCreating ? "Create Category" : "Edit Category"}</h2>
               <button onClick={handleCancel} className="text-white/40 hover:text-white transition-colors"><X className="w-6 h-6" /></button>
@@ -106,7 +108,7 @@ export default function AdminSkillsPage() {
                 {iconOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
               </select>
             </div>
-            <input placeholder="Skills (comma separated)" value={form.skills.join(", ")} onChange={(e) => setForm({ ...form, skills: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white mb-6 focus:border-neon-blue focus:outline-none" />
+            <input placeholder="Skills (comma separated)" value={skillsRaw} onChange={(e) => setSkillsRaw(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white mb-6 focus:border-neon-blue focus:outline-none" />
             <button onClick={handleSave} disabled={isSaving} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple text-white font-semibold text-sm">
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} {isCreating ? "Create" : "Save"}
             </button>
@@ -119,7 +121,7 @@ export default function AdminSkillsPage() {
           <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-white/20" /></div>
         ) : (
           skills.map((cat, i) => (
-            <motion.div key={cat.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between group hover:bg-white/[0.07] transition-all duration-300">
+            <motion.div key={cat.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:bg-white/[0.07] transition-all duration-300">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center">{iconMap[cat.icon]}</div>
                 <div>

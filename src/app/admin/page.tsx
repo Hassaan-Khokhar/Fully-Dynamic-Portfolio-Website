@@ -99,7 +99,7 @@ export default function AdminOverview() {
             recentProjects.map((project) => (
               <div
                 key={project.id}
-                className="flex items-center justify-between p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-all duration-300"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-all duration-300"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-xl bg-neon-blue/10 flex items-center justify-center">
@@ -110,7 +110,7 @@ export default function AdminOverview() {
                     <p className="text-white/40 text-sm truncate max-w-md">{project.description}</p>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="hidden sm:flex gap-2">
                   {project.tags.slice(0, 2).map((tag: string) => (
                     <span key={tag} className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-white/50">
                       {tag}

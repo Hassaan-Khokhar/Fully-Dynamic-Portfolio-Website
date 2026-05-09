@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, MessageSquare, FolderKanban, ArrowLeft, Code2, GraduationCap, Briefcase, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, MessageSquare, FolderKanban, ArrowLeft, Code2, GraduationCap, Briefcase, Settings, LogOut, Menu, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isLoginPage = pathname === "/admin/login";
 
@@ -58,15 +60,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .admin-root input, .admin-root textarea {
           cursor: text !important;
         }
+        select option {
+          background-color: #0a0a0f;
+          color: #ffffff;
+        }
       `}</style>
 
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="admin-root w-64 border-r border-white/5 bg-white/[0.02] flex flex-col fixed h-full z-50">
-        <div className="p-6 border-b border-white/5">
-          <Link href="/" className="text-2xl font-extrabold tracking-tighter text-white inline-block">
-            HASSAAN<span className="text-neon-blue">.</span>
-          </Link>
-          <p className="text-xs text-white/40 mt-1 tracking-widest uppercase">Admin Dashboard</p>
+      <aside className={`admin-root w-64 border-r border-white/5 bg-[#030305]/95 backdrop-blur-xl flex flex-col fixed h-full z-50 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="p-6 border-b border-white/5 flex items-center justify-between">
+          <div>
+            <Link href="/" className="text-2xl font-extrabold tracking-tighter text-white inline-block">
+              HASSAAN<span className="text-neon-blue">.</span>
+            </Link>
+            <p className="text-xs text-white/40 mt-1 tracking-widest uppercase">Admin Dashboard</p>
+          </div>
+          <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/40 hover:text-white transition-colors">
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -76,6 +95,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
                   isActive
                     ? "bg-neon-blue/10 text-neon-blue border border-neon-blue/20"
@@ -108,7 +128,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content */}
-      <main className="admin-root flex-1 ml-64 p-8">
+      <main className="admin-root flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8 min-w-0">
+        {/* Mobile Top Bar */}
+        <div className="flex items-center gap-4 mb-6 lg:hidden">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <span className="text-lg font-bold tracking-tighter text-white">
+            HASSAAN<span className="text-neon-blue">.</span>
+          </span>
+        </div>
         {children}
       </main>
     </div>

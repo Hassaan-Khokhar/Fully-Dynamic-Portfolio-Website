@@ -31,6 +31,7 @@ export default function AdminProjectsPage() {
   };
 
   const [formData, setFormData] = useState<Project>(emptyProject);
+  const [tagsRaw, setTagsRaw] = useState("");
 
   useEffect(() => {
     fetchProjects();
@@ -70,6 +71,7 @@ export default function AdminProjectsPage() {
   const handleEdit = (project: Project) => {
     setEditingProject(project);
     setFormData(project);
+    setTagsRaw(project.tags.join(", "));
     setIsCreating(false);
     setPendingUploads([]);
     setPendingDeletions([]);
@@ -79,6 +81,7 @@ export default function AdminProjectsPage() {
     setIsCreating(true);
     setEditingProject(null);
     setFormData(emptyProject);
+    setTagsRaw("");
     setPendingUploads([]);
     setPendingDeletions([]);
   };
@@ -142,12 +145,13 @@ export default function AdminProjectsPage() {
       if (error) console.error("Error deleting old images:", error);
     }
     
+    const parsedTags = tagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
     const dbData = {
       title: formData.title,
       description: formData.description,
       long_description: formData.longDescription,
-      tags: formData.tags,
-      tag_colors: formData.tagColors,
+      tags: parsedTags,
+      tag_colors: parsedTags.map(() => "bg-sky-500/20 text-sky-400"),
       hover_color: formData.hoverColor,
       features: formData.features,
       tech_stack: formData.techStack,
@@ -200,6 +204,7 @@ export default function AdminProjectsPage() {
     setEditingProject(null);
     setIsCreating(false);
     setFormData(emptyProject);
+    setTagsRaw("");
     setPendingUploads([]);
     setPendingDeletions([]);
   };
@@ -233,7 +238,7 @@ export default function AdminProjectsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8"
+            className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-8 mb-8"
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">
@@ -253,14 +258,8 @@ export default function AdminProjectsPage() {
               />
               <input
                 placeholder="Tags (comma separated)"
-                value={formData.tags.join(", ")}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
-                    tagColors: e.target.value.split(",").map(() => "bg-sky-500/20 text-sky-400"),
-                  })
-                }
+                value={tagsRaw}
+                onChange={(e) => setTagsRaw(e.target.value)}
                 className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-neon-blue focus:outline-none transition-all duration-300"
               />
             </div>
@@ -397,7 +396,7 @@ export default function AdminProjectsPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between hover:bg-white/[0.07] transition-all duration-300 group"
+              className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/[0.07] transition-all duration-300 group"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center">

@@ -27,7 +27,8 @@ export default function AdminSettingsPage() {
     hero_taglines: "",
     hero_bio: "",
     hero_image: "",
-    resume_url: ""
+    resume_url: "",
+    about_text: ""
   });
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -52,7 +53,8 @@ export default function AdminSettingsPage() {
         hero_taglines: data.hero_taglines || "",
         hero_bio: data.hero_bio || "",
         hero_image: data.hero_image || "",
-        resume_url: data.resume_url || ""
+        resume_url: data.resume_url || "",
+        about_text: data.about_text || ""
       });
     }
     setLoading(false);
@@ -122,7 +124,7 @@ export default function AdminSettingsPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Contact Information */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/5 border border-white/10 rounded-2xl p-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8">
           <h2 className="text-xl font-bold text-white mb-6">Contact & Socials</h2>
           <div className="space-y-4 mb-6">
             <div className="flex items-center gap-4">
@@ -149,7 +151,7 @@ export default function AdminSettingsPage() {
         </motion.div>
 
         {/* Hero Section Settings */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white/5 border border-white/10 rounded-2xl p-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8">
           <h2 className="text-xl font-bold text-white mb-6">Hero Section</h2>
           <div className="space-y-4">
             <div>
@@ -207,9 +209,24 @@ export default function AdminSettingsPage() {
             </div>
           </div>
         </motion.div>
+
+        {/* About Me Settings */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 xl:col-span-2">
+          <h2 className="text-xl font-bold text-white mb-6">About Me Section</h2>
+          <div>
+            <label className="block text-sm font-medium text-white/50 mb-2">About Text</label>
+            <textarea 
+              rows={6}
+              placeholder="Write your About Me paragraph here..." 
+              value={form.about_text} 
+              onChange={(e) => setForm({ ...form, about_text: e.target.value })} 
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-neon-blue focus:outline-none resize-none" 
+            />
+          </div>
+        </motion.div>
       </div>
 
-      <div className="mt-12 flex items-center gap-4">
+      <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <button onClick={handleSave} disabled={isSaving} className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple text-white font-bold text-sm hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all duration-500 disabled:opacity-50">
           {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save All Settings
         </button>

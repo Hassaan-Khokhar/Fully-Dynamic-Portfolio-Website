@@ -12,20 +12,50 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Hassaan Ali (Hassaan Khokhar) | Full Stack Architect & Flutter Specialist",
-  description: "Official Portfolio of Hassaan Ali (Hassaan Khokhar), a Full Stack Developer and Flutter Engineer. Specialized in architecting robust database-driven backends and fluid mobile ecosystems.",
-  keywords: ["Hassaan Ali", "Hassaan Khokhar", "Full Stack Developer", "Flutter Engineer", "Portfolio", "Software Engineer", "COMSATS University", "Web Developer", "App Developer"],
-  authors: [{ name: "Hassaan Ali" }],
+  metadataBase: new URL("https://hassaanali.com"),
+  title: {
+    default: "Hassaan Ali (Hassaan Khokhar) | Full Stack Architect & Flutter Specialist",
+    template: "%s | Hassaan Ali Portfolio",
+  },
+  description: "Official Portfolio of Hassaan Ali (Hassaan Khokhar), a Full Stack Developer and Flutter Engineer at COMSATS University Islamabad. Specialized in architecting robust database-driven backends, cross-platform mobile apps with Flutter, and scalable web solutions.",
+  keywords: [
+    "Hassaan Ali",
+    "Hassaan Khokhar",
+    "Hassaan Ali Portfolio",
+    "Hassaan Khokhar Portfolio",
+    "Full Stack Developer",
+    "Flutter Engineer",
+    "Flutter Developer",
+    "Software Engineer",
+    "Web Developer",
+    "App Developer",
+    "COMSATS University",
+    "Portfolio",
+    "Laravel Developer",
+    "React Developer",
+    "Next.js Developer",
+    "Mobile App Developer",
+    "Pakistan Developer",
+  ],
+  authors: [{ name: "Hassaan Ali", url: "https://hassaanali.com" }],
+  creator: "Hassaan Ali",
+  publisher: "Hassaan Ali",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.json",
   openGraph: {
     title: "Hassaan Ali | Full Stack Architect & Flutter Specialist",
-    description: "Architecting robust backends and fluid mobile ecosystems.",
-    url: "https://hassaanali.com", // User should update this with their actual domain
+    description: "Full Stack Developer & Flutter Engineer. Building robust backends and fluid mobile ecosystems. Explore my projects, skills, and experience.",
+    url: "https://hassaanali.com",
     siteName: "Hassaan Ali Portfolio",
     images: [
       {
-        url: "/og-image.png", // User should add an OG image
+        url: "/og-image.png",
         width: 1200,
         height: 630,
+        alt: "Hassaan Ali - Full Stack Architect & Flutter Specialist",
       },
     ],
     locale: "en_US",
@@ -33,13 +63,27 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hassaan Ali | Full Stack Architect",
-    description: "Full Stack Developer & Flutter Specialist",
-    creator: "@hassaanali", // User should update
+    title: "Hassaan Ali | Full Stack Architect & Flutter Specialist",
+    description: "Full Stack Developer & Flutter Engineer. Building robust backends and fluid mobile ecosystems.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://hassaanali.com",
+  },
+  verification: {
+    // Add your Google Search Console verification code here when ready
+    // google: "your-verification-code",
   },
 };
 

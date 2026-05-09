@@ -72,7 +72,7 @@ export default function AdminExperiencePage() {
 
       <AnimatePresence>
         {(isCreating || editing) && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-8 mb-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">{isCreating ? "Add Experience" : "Edit Experience"}</h2>
               <button onClick={handleCancel} className="text-white/40 hover:text-white transition-colors"><X className="w-6 h-6" /></button>
@@ -100,7 +100,7 @@ export default function AdminExperiencePage() {
           <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-white/20" /></div>
         ) : (
           items.map((item, i) => (
-            <motion.div key={item.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center justify-between group hover:bg-white/[0.07] transition-all duration-300">
+            <motion.div key={item.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:bg-white/[0.07] transition-all duration-300">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-neon-purple/10 flex items-center justify-center"><Briefcase className="w-6 h-6 text-neon-purple" /></div>
                 <div>

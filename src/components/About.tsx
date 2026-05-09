@@ -2,7 +2,11 @@
 
 import { motion } from "framer-motion";
 
-export default function About() {
+const defaultAboutText = `I am currently a Bachelor of Science in Computer Science student at COMSATS University Islamabad, Wah Campus, expecting to graduate in 2027. I am deeply experienced in building scalable applications, with a dual focus on Full Stack Web (Laravel, PHP, MySQL) and Mobile Application Development (Flutter, Firebase, Supabase). Currently launching professional freelance services while planning a hyper-local service marketplace startup.`;
+
+export default function About({ contact }: { contact: any }) {
+  const aboutText = contact.about_text || defaultAboutText;
+
   return (
     <section id="about" className="py-24 relative">
       <div className="container mx-auto px-6 max-w-7xl">
@@ -18,7 +22,7 @@ export default function About() {
           </h2>
           
           <p className="text-lg text-white/70 leading-relaxed">
-            I am currently a Bachelor of Science in Computer Science student at COMSATS University Islamabad, Wah Campus, expecting to graduate in 2027. I am deeply experienced in building scalable applications, with a dual focus on <strong className="text-white font-semibold">Full Stack Web (Laravel, PHP, MySQL)</strong> and <strong className="text-white font-semibold">Mobile Application Development (Flutter, Firebase, Supabase)</strong>. Currently launching professional freelance services while planning a hyper-local service marketplace startup.
+            {aboutText}
           </p>
         </motion.div>
       </div>

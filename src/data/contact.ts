@@ -8,6 +8,7 @@ export interface ContactInfo {
   hero_bio?: string;
   hero_image?: string;
   resume_url?: string;
+  about_text?: string;
 }
 
 export const contactInfo: ContactInfo = {

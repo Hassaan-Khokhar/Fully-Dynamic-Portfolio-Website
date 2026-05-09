@@ -27,6 +27,12 @@ a, button, input, select, textarea {
   cursor: none !important;
 }
 
+/* Dark background for select dropdown options */
+select option {
+  background-color: #0a0a0f;
+  color: #ffffff;
+}
+
 /* Morphing Blob Animation (Exact match from HTML) */
 @keyframes morph {
   0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
