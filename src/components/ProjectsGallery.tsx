@@ -61,7 +61,7 @@ function ProjectCard({ project }: { project: Project }) {
       className={`interactive-element bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 flex flex-col ${project.reverse ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 items-center group relative w-full cursor-none`}
     >
       <div className="w-full md:w-1/2" style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}>
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4">
           {project.tags.map((tag, i) => (
             <span
               key={tag}
