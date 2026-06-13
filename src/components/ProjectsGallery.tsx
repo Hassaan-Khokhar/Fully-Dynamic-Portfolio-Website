@@ -7,10 +7,22 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { Project } from "@/data/projects";
 
-function ProjectCard({ project }: { project: Project }) {
+const accentColors = [
+  { hover: "group-hover:text-sky-400", tag: "bg-sky-500/20 text-sky-400", glow: "rgba(59, 130, 246, 0.15)" },
+  { hover: "group-hover:text-red-400", tag: "bg-red-500/20 text-red-400", glow: "rgba(239, 68, 68, 0.15)" },
+  { hover: "group-hover:text-emerald-400", tag: "bg-emerald-500/20 text-emerald-400", glow: "rgba(52, 211, 153, 0.15)" },
+  { hover: "group-hover:text-amber-400", tag: "bg-amber-500/20 text-amber-400", glow: "rgba(251, 191, 36, 0.15)" },
+  { hover: "group-hover:text-violet-400", tag: "bg-violet-500/20 text-violet-400", glow: "rgba(139, 92, 246, 0.15)" },
+  { hover: "group-hover:text-pink-400", tag: "bg-pink-500/20 text-pink-400", glow: "rgba(236, 72, 153, 0.15)" },
+];
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const scale = useMotionValue(1);
+
+  const isReversed = index % 2 !== 0;
+  const accent = accentColors[index % accentColors.length];
 
   const springConfig = { stiffness: 400, damping: 30, mass: 0.5 };
   const mouseXSpring = useSpring(x, springConfig);
@@ -22,7 +34,7 @@ function ProjectCard({ project }: { project: Project }) {
   
   const shadowX = useTransform(mouseXSpring, [-0.5, 0.5], [30, -30]);
   const shadowY = useTransform(mouseYSpring, [-0.5, 0.5], [30, -30]);
-  const boxShadow = useMotionTemplate`${shadowX}px ${shadowY}px 40px rgba(59, 130, 246, 0.15)`;
+  const boxShadow = useMotionTemplate`${shadowX}px ${shadowY}px 40px ${accent.glow}`;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -58,20 +70,20 @@ function ProjectCard({ project }: { project: Project }) {
         boxShadow,
         transformStyle: "preserve-3d"
       }}
-      className={`interactive-element bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 flex flex-col ${project.reverse ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 items-center group relative w-full cursor-none`}
+      className={`interactive-element bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 items-center group relative w-full cursor-none`}
     >
       <div className="w-full md:w-1/2" style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}>
         <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag, i) => (
+          {project.tags.map((tag) => (
             <span
               key={tag}
-              className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider ${project.tagColors[i] || "bg-white/5 border border-white/10 text-white/50"}`}
+              className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider ${accent.tag}`}
             >
               {tag.toUpperCase()}
             </span>
           ))}
         </div>
-        <h3 className={`text-3xl font-bold mb-4 text-white transition-all duration-500 ease-out ${project.hoverColor}`}>{project.title}</h3>
+        <h3 className={`text-3xl font-bold mb-4 text-white transition-all duration-500 ease-out ${accent.hover}`}>{project.title}</h3>
         <p className="text-white/60 mb-6 leading-relaxed">
           {project.description}
         </p>
@@ -120,8 +132,8 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
         </motion.h2>
 
         <div className="space-y-12">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+          {projects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
       </div>
