@@ -16,9 +16,10 @@ const LinkedinIcon = ({ className }: { className?: string }) => (
     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
   </svg>
 );
-
 export default function AdminSettingsPage() {
-  const [form, setForm] = useState({ 
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
     location: "", 
     email: "", 
     phone: "", 
@@ -45,6 +46,8 @@ export default function AdminSettingsPage() {
     if (error) console.error(error);
     else if (data) {
       setForm({ 
+        first_name: data.first_name || "HASSAAN",
+        last_name: data.last_name || "Ali",
         location: data.location || "", 
         email: data.email || "", 
         phone: data.phone || "",
@@ -125,8 +128,12 @@ export default function AdminSettingsPage() {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Contact Information */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-white mb-6">Contact & Socials</h2>
+          <h2 className="text-xl font-bold text-white mb-6">Personal & Contact Info</h2>
           <div className="space-y-4 mb-6">
+            <div className="grid grid-cols-2 gap-4">
+              <input placeholder="First Name (e.g. HASSAAN)" value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-neon-blue focus:outline-none" />
+              <input placeholder="Last Name (e.g. Ali)" value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-neon-blue focus:outline-none" />
+            </div>
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center shrink-0"><MapPin className="w-5 h-5 text-neon-blue" /></div>
               <input placeholder="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-neon-blue focus:outline-none" />

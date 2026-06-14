@@ -12,7 +12,7 @@ export async function getPortfolioData() {
     { data: experience },
     { data: contactInfo }
   ] = await Promise.all([
-    supabase.from("projects").select("*").order("created_at", { ascending: false }),
+    supabase.from("projects").select("*").order("updated_at", { ascending: false }),
     supabase.from("skills").select("*").order("sort_order", { ascending: true }),
     supabase.from("education").select("*").order("sort_order", { ascending: true }),
     supabase.from("experience").select("*").order("sort_order", { ascending: true }),
@@ -46,6 +46,8 @@ export async function getPortfolioData() {
     education: (education || []) as EducationItem[],
     experience: (experience || []) as ExperienceItem[],
     contactInfo: contactInfo || { 
+      first_name: "HASSAAN",
+      last_name: "Ali",
       location: "", 
       email: "", 
       phone: "", 

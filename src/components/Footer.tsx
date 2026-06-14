@@ -70,8 +70,8 @@ export default function Footer({ contact }: { contact: typeof contactInfo }) {
 
         {/* Bottom Footer */}
         <div className="pt-12 border-t border-white/10 flex flex-col items-center justify-center">
-          <Link href="#home" className="text-4xl font-black tracking-tighter text-white mb-8 interactive-element inline-block">
-            HASSAAN<span className="text-neon-blue">.</span>
+          <Link href="#home" className="text-4xl font-black tracking-tighter text-white mb-8 interactive-element inline-block uppercase">
+            {(contact as any).first_name || "HASSAAN"}<span className="text-neon-blue">.</span>
           </Link>
 
           <div className="flex items-center gap-8 mb-8">
@@ -87,7 +87,7 @@ export default function Footer({ contact }: { contact: typeof contactInfo }) {
           </div>
 
           <p className="text-sm text-white/40">
-            © 2026 Hassaan Ali. All rights reserved.
+            © 2026 {(contact as any).first_name || "Hassaan"} {(contact as any).last_name || "Ali"}. All rights reserved.
           </p>
         </div>
       </div>

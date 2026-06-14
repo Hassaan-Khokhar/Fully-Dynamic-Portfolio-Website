@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Pencil, Trash2, X, Save, FolderKanban, Upload, Image as ImageIcon, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Project } from "@/data/projects";
+import { useToast } from "@/components/Toast";
 
 export default function AdminProjectsPage() {
   const [projectsList, setProjectsList] = useState<Project[]>([]);
@@ -15,6 +16,7 @@ export default function AdminProjectsPage() {
   const [uploading, setUploading] = useState(false);
   const [pendingUploads, setPendingUploads] = useState<{file: File, preview: string}[]>([]);
   const [pendingDeletions, setPendingDeletions] = useState<string[]>([]);
+  const { showToast } = useToast();
 
   const emptyProject: Project = {
     id: "",
@@ -42,7 +44,7 @@ export default function AdminProjectsPage() {
     const { data, error } = await supabase
       .from("projects")
       .select("*")
-      .order("sort_order", { ascending: true });
+      .order("updated_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching projects:", error);
@@ -180,6 +182,7 @@ export default function AdminProjectsPage() {
     setPendingUploads([]);
     setPendingDeletions([]);
     setIsSaving(false);
+    showToast(isCreating ? "Project created successfully" : "Project updated successfully");
     fetchProjects();
   };
 
@@ -195,7 +198,9 @@ export default function AdminProjectsPage() {
     const { error } = await supabase.from("projects").delete().eq("id", project.id);
     if (error) {
       console.error("Error deleting project:", error);
+      showToast("Failed to delete project", "error");
     } else {
+      showToast("Project deleted successfully", "delete");
       fetchProjects();
     }
   };

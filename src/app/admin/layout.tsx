@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, MessageSquare, FolderKanban, ArrowLeft, Code2, GraduationCap, Briefcase, Settings, LogOut, Menu, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { ToastProvider } from "@/components/Toast";
 
 const navItems = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
@@ -20,6 +21,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [firstName, setFirstName] = useState("HASSAAN");
+  
+  useEffect(() => {
+    supabase.from("contact_info").select("first_name").single().then(({ data }) => {
+      if (data?.first_name) setFirstName(data.first_name);
+    });
+  }, []);
 
   const isLoginPage = pathname === "/admin/login";
 
@@ -48,6 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
+    <ToastProvider>
     <div className="min-h-screen bg-[#030305] text-white flex" style={{ cursor: "default" }}>
       {/* Global cursor override for admin */}
       <style>{`
@@ -78,8 +87,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className={`admin-root w-64 border-r border-white/5 bg-[#030305]/95 backdrop-blur-xl flex flex-col fixed h-full z-50 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="p-6 border-b border-white/5 flex items-center justify-between">
           <div>
-            <Link href="/" className="text-2xl font-extrabold tracking-tighter text-white inline-block">
-              HASSAAN<span className="text-neon-blue">.</span>
+            <Link href="/" className="text-2xl font-extrabold tracking-tighter text-white inline-block uppercase">
+              {firstName}<span className="text-neon-blue">.</span>
             </Link>
             <p className="text-xs text-white/40 mt-1 tracking-widest uppercase">Admin Dashboard</p>
           </div>
@@ -137,12 +146,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="text-lg font-bold tracking-tighter text-white">
-            HASSAAN<span className="text-neon-blue">.</span>
+          <span className="text-lg font-bold tracking-tighter text-white uppercase">
+            {firstName}<span className="text-neon-blue">.</span>
           </span>
         </div>
         {children}
       </main>
     </div>
+    </ToastProvider>
   );
 }

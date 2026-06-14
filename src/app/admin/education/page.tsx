@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Pencil, Trash2, X, Save, GraduationCap, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { EducationItem } from "@/data/education";
+import { useToast } from "@/components/Toast";
 
 export default function AdminEducationPage() {
   const [items, setItems] = useState<EducationItem[]>([]);
@@ -14,6 +15,7 @@ export default function AdminEducationPage() {
   const [isCreating, setIsCreating] = useState(false);
 
   const empty: EducationItem = { id: "", year: "", degree: "", institution: "", cgpa: "", description: "", active: false };
+  const { showToast } = useToast();
   const [form, setForm] = useState<EducationItem>(empty);
 
   useEffect(() => {
@@ -53,13 +55,18 @@ export default function AdminEducationPage() {
 
     handleCancel();
     setIsSaving(false);
+    showToast(isCreating ? "Education entry created" : "Education entry updated");
     fetchEducation();
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this entry?")) return;
-    await supabase.from("education").delete().eq("id", id);
-    fetchEducation();
+    const { error } = await supabase.from("education").delete().eq("id", id);
+    if (error) showToast("Failed to delete entry", "error");
+    else {
+      showToast("Education entry deleted", "delete");
+      fetchEducation();
+    }
   };
 
   return (

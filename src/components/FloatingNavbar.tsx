@@ -48,7 +48,7 @@ function MagneticItem({ children, className }: { children: React.ReactNode, clas
   );
 }
 
-export default function FloatingNavbar() {
+export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?: string }) {
   const { scrollY } = useScroll();
   const [activeSection, setActiveSection] = useState("home");
   const [isOpen, setIsOpen] = useState(false);
@@ -102,8 +102,8 @@ export default function FloatingNavbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
         <MagneticItem>
-          <Link href="/" className="interactive-element text-2xl font-extrabold tracking-tighter text-white inline-block">
-            HASSAAN<span className="text-neon-blue">.</span>
+          <Link href="/" className="interactive-element text-2xl font-extrabold tracking-tighter text-white inline-block uppercase">
+            {first_name}<span className="text-neon-blue">.</span>
           </Link>
         </MagneticItem>
         

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Pencil, Trash2, X, Save, Briefcase, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ExperienceItem } from "@/data/experience";
+import { useToast } from "@/components/Toast";
 
 export default function AdminExperiencePage() {
   const [items, setItems] = useState<ExperienceItem[]>([]);
@@ -14,6 +15,7 @@ export default function AdminExperiencePage() {
   const [isCreating, setIsCreating] = useState(false);
 
   const empty: ExperienceItem = { id: "", year: "", role: "", company: "", bullets: [], active: false };
+  const { showToast } = useToast();
   const [form, setForm] = useState<ExperienceItem>(empty);
 
   useEffect(() => {
@@ -52,13 +54,18 @@ export default function AdminExperiencePage() {
 
     handleCancel();
     setIsSaving(false);
+    showToast(isCreating ? "Experience role created" : "Experience role updated");
     fetchExperience();
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this role?")) return;
-    await supabase.from("experience").delete().eq("id", id);
-    fetchExperience();
+    const { error } = await supabase.from("experience").delete().eq("id", id);
+    if (error) showToast("Failed to delete role", "error");
+    else {
+      showToast("Experience role deleted", "delete");
+      fetchExperience();
+    }
   };
 
   return (

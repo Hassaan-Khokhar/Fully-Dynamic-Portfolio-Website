@@ -86,8 +86,8 @@ export default function Hero({ contact }: { contact: any }) {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="text-neon-blue font-semibold tracking-widest uppercase mb-4">Hi, I&apos;m</p>
-          <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-4 text-white">
-            HASSAAN <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple">Ali</span>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-4 text-white uppercase">
+            {(contact as any).first_name || "HASSAAN"} <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple capitalize">{(contact as any).last_name || "Ali"}</span>
           </h1>
           <h2 className="text-2xl md:text-3xl text-white/70 mb-6 font-light">
             I&apos;m a <span className="font-semibold text-white">

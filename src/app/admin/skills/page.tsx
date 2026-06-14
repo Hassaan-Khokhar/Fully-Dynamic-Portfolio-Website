@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Pencil, Trash2, X, Save, Code2, Layers, Database, Lightbulb, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { SkillCategory } from "@/data/skills";
+import { useToast } from "@/components/Toast";
 
 const iconOptions = [
   { value: "code" as const, label: "Code", icon: Code2 },
@@ -28,6 +29,7 @@ export default function AdminSkillsPage() {
   const [isCreating, setIsCreating] = useState(false);
 
   const empty: SkillCategory = { id: "", title: "", icon: "code", skills: [], className: "md:col-span-1 md:row-span-1" };
+  const { showToast } = useToast();
   const [form, setForm] = useState<SkillCategory>(empty);
   const [skillsRaw, setSkillsRaw] = useState("");
 
@@ -74,13 +76,18 @@ export default function AdminSkillsPage() {
 
     handleCancel();
     setIsSaving(false);
+    showToast(isCreating ? "Skill category created" : "Skill category updated");
     fetchSkills();
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this category?")) return;
-    await supabase.from("skills").delete().eq("id", id);
-    fetchSkills();
+    const { error } = await supabase.from("skills").delete().eq("id", id);
+    if (error) showToast("Failed to delete category", "error");
+    else {
+      showToast("Category deleted", "delete");
+      fetchSkills();
+    }
   };
 
   return (

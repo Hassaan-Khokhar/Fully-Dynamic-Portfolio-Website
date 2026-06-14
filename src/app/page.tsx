@@ -56,7 +56,7 @@ export default async function Home() {
         }}
       />
       <CustomCursor />
-      <FloatingNavbar />
+      <FloatingNavbar first_name={(data.contactInfo as any).first_name || "HASSAAN"} />
       <main className="flex flex-col min-h-screen">
         <Hero contact={data.contactInfo} />
         <About contact={data.contactInfo} />
