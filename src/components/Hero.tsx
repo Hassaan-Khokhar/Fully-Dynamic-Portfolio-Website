@@ -74,8 +74,8 @@ export default function Hero({ contact }: { contact: any }) {
     <section id="home" className="min-h-screen flex items-center pt-20 relative overflow-hidden">
         
       {/* Ambient Background Animation */}
-      <motion.div style={{ y: y1 }} className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-blue/20 rounded-full blur-[120px] mix-blend-screen animate-pulse pointer-events-none" />
-      <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/20 rounded-full blur-[120px] mix-blend-screen animate-pulse delay-1000 pointer-events-none" />
+      <motion.div style={{ y: y1 }} className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-blue/20 rounded-full blur-[120px] mix-blend-screen animate-pulse pointer-events-none will-change-transform" />
+      <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/20 rounded-full blur-[120px] mix-blend-screen animate-pulse delay-1000 pointer-events-none will-change-transform" />
 
       <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
           
