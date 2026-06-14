@@ -85,8 +85,8 @@ export default function About({ contact }: { contact: any }) {
               
               {/* JSON Output */}
               <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                whileInView={{ opacity: 1, height: "auto" }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
                 className="text-white/60 pl-4 border-l-2 border-white/10 space-y-1"
               >
