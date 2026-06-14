@@ -21,9 +21,6 @@ export default function About({ contact }: { contact: any }) {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-neon-blue text-sm font-bold tracking-widest uppercase mb-6">
-            <Sparkles className="w-4 h-4" /> Discover My Journey
-          </div>
           <h2 className="text-4xl md:text-5xl font-black mb-8 tracking-tight text-white uppercase">
             About <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple">Me</span>
           </h2>
@@ -39,7 +36,7 @@ export default function About({ contact }: { contact: any }) {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-lg mx-auto lg:ml-auto group"
+          className="relative w-full max-w-lg mx-auto lg:ml-auto group pointer-events-none lg:pointer-events-auto"
         >
           {/* Subtle glow behind the terminal */}
           <div className="absolute -inset-1 bg-gradient-to-r from-neon-blue to-neon-purple rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
