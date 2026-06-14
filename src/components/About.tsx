@@ -36,12 +36,12 @@ export default function About({ contact }: { contact: any }) {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-lg mx-auto lg:ml-auto group pointer-events-none lg:pointer-events-auto"
+          className="relative w-full max-w-lg mx-auto lg:ml-auto group touch-pan-y transform-gpu will-change-transform"
         >
           {/* Subtle glow behind the terminal */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-neon-blue to-neon-purple rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+          <div className="absolute -inset-1 bg-gradient-to-r from-neon-blue to-neon-purple rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 transform-gpu will-change-transform"></div>
           
-          <div className="relative rounded-xl overflow-hidden border border-white/10 bg-[#0a0a0f]/90 backdrop-blur-xl shadow-2xl">
+          <div className="relative rounded-xl overflow-hidden border border-white/10 bg-[#0a0a0f]/90 backdrop-blur-xl shadow-2xl transform-gpu will-change-transform">
             {/* Terminal Header */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
               <div className="flex gap-2">
