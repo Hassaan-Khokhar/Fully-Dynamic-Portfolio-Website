@@ -17,13 +17,17 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  cursor: none;
   overflow-x: hidden;
 }
 
-/* Ensure interactive elements don't show default cursor */
-a, button, input, select, textarea {
-  cursor: none !important;
+/* Hide default cursor only on large screens */
+@media (min-width: 1024px) {
+  body {
+    cursor: none;
+  }
+  a, button, input, select, textarea {
+    cursor: none !important;
+  }
 }
 
 /* Dark background for select dropdown options */
