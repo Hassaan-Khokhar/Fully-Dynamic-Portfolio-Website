@@ -163,12 +163,14 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
               <div className="absolute inset-0 bg-white">
                 {/* The document underneath */}
                 {cert.fileType === "image" ? (
-                  <Image 
-                    src={cert.fileUrl} 
-                    alt={cert.title} 
-                    fill 
-                    className="object-contain p-2 pointer-events-none" 
-                  />
+                  <div className="absolute inset-2 md:inset-0">
+                    <Image 
+                      src={cert.fileUrl} 
+                      alt={cert.title} 
+                      fill 
+                      className="object-contain md:object-cover pointer-events-none" 
+                    />
+                  </div>
                 ) : (
                   <div className="absolute inset-0 overflow-hidden rounded-2xl flex items-center justify-center p-2">
                     {isTouch ? (
