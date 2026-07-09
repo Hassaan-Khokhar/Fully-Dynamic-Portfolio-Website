@@ -6,7 +6,7 @@ import { Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
-    name: "",
+    name: "",   
     email: "",
     subject: "",
     message: "",

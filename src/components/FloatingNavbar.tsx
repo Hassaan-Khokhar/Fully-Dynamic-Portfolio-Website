@@ -73,7 +73,7 @@ export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -70% 0px",
+      rootMargin: "-20% 0px -40% 0px",
       threshold: 0,
     };
 

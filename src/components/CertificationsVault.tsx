@@ -6,6 +6,9 @@ import { ExternalLink, ShieldCheck, Award, Signature } from "lucide-react";
 import { Certification, fallbackCertifications } from "@/data/certifications";
 import { getGradient } from "@/lib/gradient";
 import Image from "next/image";
+import dynamic from 'next/dynamic';
+
+const PDFViewer = dynamic(() => import('./PDFViewer'), { ssr: false });
 
 const CSSCertificate = ({ cert, gradient, isShutter = false }: { cert: Certification, gradient: string, isShutter?: boolean }) => (
   <div className={`absolute inset-0 flex flex-col items-center justify-between p-8 text-center transition-all duration-500 ${isShutter ? 'bg-black/80 backdrop-blur-xl' : 'bg-[#07070b]'}`}>
@@ -164,15 +167,19 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
                     src={cert.fileUrl} 
                     alt={cert.title} 
                     fill 
-                    className="object-cover" 
+                    className="object-contain p-2 pointer-events-none" 
                   />
                 ) : (
-                  <div className="absolute inset-0 overflow-hidden rounded-2xl flex items-center justify-center">
-                    <iframe
-                      src={isTouch ? `https://docs.google.com/viewer?url=${encodeURIComponent(cert.fileUrl)}&embedded=true` : `${cert.fileUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-                      title={cert.title}
-                      className="absolute w-[105%] h-[105%] -left-[2.5%] -top-[2.5%] border-0 pointer-events-none bg-white"
-                    />
+                  <div className="absolute inset-0 overflow-hidden rounded-2xl flex items-center justify-center p-2">
+                    {isTouch ? (
+                      <PDFViewer file={cert.fileUrl} />
+                    ) : (
+                      <iframe
+                        src={`${cert.fileUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                        title={cert.title}
+                        className="absolute w-[105%] h-[105%] -left-[2.5%] -top-[2.5%] border-0 pointer-events-none bg-white"
+                      />
+                    )}
                   </div>
                 )}
                 
@@ -279,6 +286,47 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
 
 export default function CertificationsVault({ certifications }: { certifications: Certification[] }) {
   const displayCertifications = certifications.length > 0 ? certifications : fallbackCertifications;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const interactTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleInteractionStart = () => {
+    if (interactTimeout.current) clearTimeout(interactTimeout.current);
+    setIsInteracting(true);
+  };
+
+  const handleInteractionEnd = () => {
+    if (interactTimeout.current) clearTimeout(interactTimeout.current);
+    interactTimeout.current = setTimeout(() => setIsInteracting(false), 2000);
+  };
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container || window.innerWidth >= 768) return; // Only run on mobile
+
+    let animationFrameId: number;
+
+    const scroll = () => {
+      // Only auto-scroll if user isn't interacting and no card is actively open
+      if (!isInteracting && !container.querySelector('.is-active')) {
+        container.scrollLeft += 0.8; // Auto-scroll speed
+      }
+
+      // Seamless infinite loop wrapping
+      if (container.scrollLeft >= container.scrollWidth / 2) {
+        container.scrollLeft -= container.scrollWidth / 2;
+      } else if (container.scrollLeft <= 0 && isInteracting) {
+        // If user aggressively swipes left past the start
+        container.scrollLeft += container.scrollWidth / 2;
+      }
+      
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isInteracting]);
 
   if (displayCertifications.length === 0) return null;
 
@@ -313,24 +361,23 @@ export default function CertificationsVault({ certifications }: { certifications
           ))}
         </div>
 
-        {/* Mobile Infinite Looping Carousel */}
-        <div className="md:hidden relative w-[100vw] left-1/2 -ml-[50vw] overflow-hidden py-4 flex">
-          <style>{`
-            @keyframes mobile-marquee {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-            }
-            .animate-mobile-marquee {
-              animation: mobile-marquee ${displayCertifications.length * 12}s linear infinite;
-              will-change: transform;
-            }
-            .animate-mobile-marquee:active,
-            .animate-mobile-marquee:has(.is-active) {
-              animation-play-state: paused;
-            }
-          `}</style>
-          
-          <div className="flex w-max animate-mobile-marquee pl-6">
+        {/* Mobile Infinite Looping & Scrollable Carousel */}
+        <div className="md:hidden relative w-[100vw] left-1/2 -ml-[50vw] overflow-hidden py-4">
+          <div 
+            ref={scrollRef}
+            className="flex w-full overflow-x-auto touch-pan-x pl-6 pb-6 -mb-6"
+            style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
+            onPointerDown={handleInteractionStart}
+            onPointerUp={handleInteractionEnd}
+            onPointerCancel={handleInteractionEnd}
+            onPointerLeave={handleInteractionEnd}
+            onTouchStart={handleInteractionStart}
+            onTouchEnd={handleInteractionEnd}
+            onWheel={() => {
+              handleInteractionStart();
+              handleInteractionEnd();
+            }}
+          >
             {[...displayCertifications, ...displayCertifications].map((cert, index) => (
               <div key={`${cert.id}-${index}`} className="w-[85vw] sm:w-[60vw] shrink-0 pr-6">
                 <VaultCard cert={cert} index={index} />
