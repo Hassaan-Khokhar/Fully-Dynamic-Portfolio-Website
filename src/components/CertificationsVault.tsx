@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ExternalLink, ShieldCheck, Award, Signature } from "lucide-react";
 import { Certification, fallbackCertifications } from "@/data/certifications";
@@ -93,19 +93,36 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
     }
   };
 
+  const tapTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastTapTime = useRef<number>(0);
+
+  const hasFile = cert.fileUrl && cert.fileUrl.length > 0;
+
   const handleClick = () => {
     if (isTouch) {
-      if (!isShutterOpen) {
-        setIsShutterOpen(true);
-      } else {
+      const now = Date.now();
+      const DOUBLE_TAP_DELAY = 300;
+
+      if (now - lastTapTime.current < DOUBLE_TAP_DELAY) {
+        // Double Tap
+        if (tapTimeout.current) clearTimeout(tapTimeout.current);
         setIsFlipped(!isFlipped);
+        lastTapTime.current = 0;
+      } else {
+        // Single Tap
+        lastTapTime.current = now;
+        tapTimeout.current = setTimeout(() => {
+          if (hasFile) {
+            setIsShutterOpen((prev) => !prev);
+          }
+        }, DOUBLE_TAP_DELAY);
       }
     } else {
       setIsFlipped(!isFlipped);
     }
   };
 
-  const hasFile = cert.fileUrl && cert.fileUrl.length > 0;
+
   const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
   return (
@@ -114,7 +131,7 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.7, delay: index * 0.1 }}
-      className="relative w-[90vw] max-w-[450px] md:max-w-none md:w-full h-[320px] md:h-[340px] shrink-0 perspective-[1200px] cursor-pointer md:cursor-none group snap-center"
+      className={`relative w-full h-[320px] md:h-[340px] shrink-0 perspective-[1200px] cursor-pointer md:cursor-none group ${isShutterOpen ? 'is-active' : ''}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={handlePointerEnter}
       onMouseLeave={handlePointerLeave}
@@ -152,7 +169,7 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
                 ) : (
                   <div className="absolute inset-0 overflow-hidden rounded-2xl flex items-center justify-center">
                     <iframe
-                      src={`${cert.fileUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                      src={isTouch ? `https://docs.google.com/viewer?url=${encodeURIComponent(cert.fileUrl)}&embedded=true` : `${cert.fileUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
                       title={cert.title}
                       className="absolute w-[105%] h-[105%] -left-[2.5%] -top-[2.5%] border-0 pointer-events-none bg-white"
                     />
@@ -163,7 +180,7 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
                 <motion.div
                   initial={false}
                   animate={{ y: isShutterOpen ? "-102%" : "0%" }}
-                  transition={{ duration: 1.2, ease: smoothEase }}
+                  transition={{ duration: 2.0, ease: smoothEase }}
                   className="absolute inset-0 z-20 pointer-events-none"
                   style={{ clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 50%)" }}
                 >
@@ -175,7 +192,7 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
                 <motion.div
                   initial={false}
                   animate={{ y: isShutterOpen ? "102%" : "0%" }}
-                  transition={{ duration: 1.2, ease: smoothEase }}
+                  transition={{ duration: 2.0, ease: smoothEase }}
                   className="absolute inset-0 z-20 pointer-events-none"
                   style={{ clipPath: "polygon(0 50%, 100% 50%, 100% 100%, 0 100%)" }}
                 >
@@ -205,7 +222,7 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
                     className="absolute inset-0 flex items-end justify-center pb-6 pointer-events-none z-30"
                   >
                     <div className="flex items-center gap-2 bg-black/70 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20 shadow-2xl animate-pulse">
-                      <span className="text-white text-xs font-bold tracking-widest uppercase">Tap to flip</span>
+                      <span className="text-white text-xs font-bold tracking-widest uppercase">Double tap to flip</span>
                       <Award className="w-3.5 h-3.5 text-neon-blue" />
                     </div>
                   </motion.div>
@@ -266,7 +283,7 @@ export default function CertificationsVault({ certifications }: { certifications
   if (displayCertifications.length === 0) return null;
 
   return (
-    <section id="certifications" className="py-24 relative overflow-hidden">
+    <section id="certifications" className="pt-24 pb-12 md:py-24 relative overflow-hidden">
       {/* Ambient background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-neon-blue/5 rounded-full blur-[120px] pointer-events-none transform-gpu" />
 
@@ -289,11 +306,37 @@ export default function CertificationsVault({ certifications }: { certifications
           </p>
         </motion.div>
 
-        {/* 2-Column Grid (Desktop) / Horizontal Carousel (Mobile) */}
-        <div className="flex md:grid md:grid-cols-2 gap-8 overflow-x-auto snap-x snap-mandatory pb-12 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 touch-pan-x" style={{ scrollbarWidth: 'none' }}>
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-2 gap-8">
           {displayCertifications.map((cert, index) => (
             <VaultCard key={cert.id} cert={cert} index={index} />
           ))}
+        </div>
+
+        {/* Mobile Infinite Looping Carousel */}
+        <div className="md:hidden relative w-[100vw] left-1/2 -ml-[50vw] overflow-hidden py-4 flex">
+          <style>{`
+            @keyframes mobile-marquee {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-mobile-marquee {
+              animation: mobile-marquee ${displayCertifications.length * 12}s linear infinite;
+              will-change: transform;
+            }
+            .animate-mobile-marquee:active,
+            .animate-mobile-marquee:has(.is-active) {
+              animation-play-state: paused;
+            }
+          `}</style>
+          
+          <div className="flex w-max animate-mobile-marquee pl-6">
+            {[...displayCertifications, ...displayCertifications].map((cert, index) => (
+              <div key={`${cert.id}-${index}`} className="w-[85vw] sm:w-[60vw] shrink-0 pr-6">
+                <VaultCard cert={cert} index={index} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -18,7 +18,7 @@ const LinkedinIcon = ({ className }: { className?: string }) => (
 
 export default function Footer({ contact }: { contact: typeof contactInfo }) {
   return (
-    <footer id="contact" className="relative overflow-hidden pt-24 pb-8 bg-[#030305] border-t border-white/5">
+    <footer id="contact" className="relative overflow-hidden pt-12 md:pt-24 pb-8 bg-[#030305] border-t border-white/5">
       {/* Subtle ambient light */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-neon-blue/5 rounded-full blur-[120px] pointer-events-none" />
       

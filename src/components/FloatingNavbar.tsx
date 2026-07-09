@@ -87,7 +87,7 @@ export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
 
-    const sections = ["home", "about", "skills", "projects", "experience", "contact"];
+    const sections = ["home", "about", "skills", "projects", "experience", "certifications", "contact"];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
