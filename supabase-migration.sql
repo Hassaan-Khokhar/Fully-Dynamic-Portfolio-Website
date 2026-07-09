@@ -145,9 +145,31 @@ insert into public.projects (slug, title, description, long_description, tags, t
 ('prime-tax', 'Prime Tax Web Platform', 'Engineered a dynamic web presence for a UK-based accounting firm, featuring secure data handling and a highly optimized relational database structure.', 'Prime Tax Accounting is a full-service web platform built for a UK-based accounting and tax advisory firm. The system features a comprehensive service catalog, secure client inquiry forms, and an optimized backend powered by Laravel and MySQL. Every page is hand-crafted for SEO performance, achieving top-tier Core Web Vitals scores.', '{"Laravel","PHP"}', '{"bg-red-500/20 text-red-400","bg-blue-500/20 text-blue-400"}', 'group-hover:text-red-400', '{"Custom-built CMS for managing service pages and blog content.","SEO-optimized with structured data, meta tags, and sitemap generation.","Secure contact forms with server-side validation and email notifications.","Responsive design optimized for all devices and screen sizes.","Image optimization pipeline converting assets to WebP format.","Netlify deployment with continuous integration from GitHub."}', '{"Laravel","PHP","MySQL","Blade Templates","Tailwind CSS","JavaScript","Netlify"}', '{}', 'https://primetaxaccounting.co.uk', '[DASHBOARD DATA]', true, 1);
 
 -- ============================================
+-- 7. CERTIFICATIONS TABLE
+-- ============================================
+create table if not exists public.certifications (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  issuer text not null,
+  date text not null,
+  credential_id text default '',
+  verify_url text default '',
+  file_url text default '',
+  file_type text default 'image' check (file_type in ('image', 'pdf')),
+  gradient text default 'from-blue-500 to-green-500',
+  sort_order int default 0,
+  created_at timestamptz default now()
+);
+
+alter table public.certifications enable row level security;
+create policy "Public read certifications" on public.certifications for select using (true);
+create policy "Admin all certifications" on public.certifications for all using (auth.role() = 'authenticated');
+
+-- ============================================
 -- STORAGE BUCKET
 -- Run this AFTER the tables are created
 -- Go to Storage in Supabase Dashboard and create
 -- a bucket called "project-images" with public access
--- and a bucket called "assets" with public access
+-- a bucket called "assets" with public access
+-- a bucket called "certifications" with public access
 -- ============================================

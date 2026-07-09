@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useMotionTemplate, useMotionValue } from "framer-motion";
 import { Code2, Layers, Database, Lightbulb } from "lucide-react";
 import { skillCategories as fallbackSkills, type SkillCategory } from "@/data/skills";
+import React, { MouseEvent } from "react";
 
 const iconMap: Record<string, React.ReactNode> = {
   code: <Code2 className="w-6 h-6 text-neon-blue" />,
@@ -28,6 +29,16 @@ const itemVariants: Variants = {
 
 export default function SkillsBentoGrid({ categories }: { categories: SkillCategory[] }) {
   const displayCategories = categories && categories.length > 0 ? categories : fallbackSkills;
+  
+  // Spotlight effect logic
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
 
   return (
     <section id="skills" className="py-24">
@@ -49,15 +60,29 @@ export default function SkillsBentoGrid({ categories }: { categories: SkillCateg
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[200px]"
+          className="group relative grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[200px]"
+          onMouseMove={handleMouseMove}
         >
           {displayCategories.map((category) => (
             <motion.div
               key={category.id}
               variants={itemVariants}
-              className={`glass rounded-3xl p-6 hover:bg-white/5 transition-all duration-500 ease-out hover:scale-[1.02] group flex flex-col ${category.className || "md:col-span-1 md:row-span-1"}`}
+              className={`relative glass rounded-3xl p-px hover:bg-white/5 transition-all duration-500 ease-out hover:scale-[1.02] flex flex-col overflow-hidden ${category.className || "md:col-span-1 md:row-span-1"}`}
             >
-              <div className="flex items-center gap-3 mb-6">
+              <motion.div
+                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
+                style={{
+                  background: useMotionTemplate`
+                    radial-gradient(
+                      600px circle at ${mouseX}px ${mouseY}px,
+                      rgba(59, 130, 246, 0.15),
+                      transparent 80%
+                    )
+                  `,
+                }}
+              />
+              <div className="relative h-full w-full rounded-[23px] bg-[#030305]/80 backdrop-blur-3xl p-6 flex flex-col z-10 border border-white/5">
+                <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-white/5 rounded-xl group-hover:scale-110 transition-all duration-500 ease-out">
                   {iconMap[category.icon as string] || iconMap.code}
                 </div>
@@ -72,6 +97,7 @@ export default function SkillsBentoGrid({ categories }: { categories: SkillCateg
                     {skill}
                   </span>
                 ))}
+                </div>
               </div>
             </motion.div>
           ))}

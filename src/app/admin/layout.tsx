@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, MessageSquare, FolderKanban, ArrowLeft, Code2, GraduationCap, Briefcase, Settings, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, MessageSquare, FolderKanban, ArrowLeft, Code2, GraduationCap, Briefcase, ShieldCheck, Settings, LogOut, Menu, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ToastProvider } from "@/components/Toast";
 
@@ -14,6 +14,7 @@ const navItems = [
   { href: "/admin/skills", label: "Skills", icon: Code2 },
   { href: "/admin/education", label: "Education", icon: GraduationCap },
   { href: "/admin/experience", label: "Experience", icon: Briefcase },
+  { href: "/admin/certifications", label: "Certifications", icon: ShieldCheck },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

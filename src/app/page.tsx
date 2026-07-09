@@ -5,6 +5,7 @@ import About from "@/components/About";
 import SkillsBentoGrid from "@/components/SkillsBentoGrid";
 import ProjectsGallery from "@/components/ProjectsGallery";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
+import CertificationsVault from "@/components/CertificationsVault";
 import Footer from "@/components/Footer";
 import { getPortfolioData } from "@/lib/data-fetch";
 
@@ -63,6 +64,7 @@ export default async function Home() {
         <SkillsBentoGrid categories={data.skills} />
         <ProjectsGallery projects={data.projects} />
         <ExperienceTimeline education={data.education} experience={data.experience} />
+        <CertificationsVault certifications={data.certifications} />
       </main>
       <Footer contact={data.contactInfo} />
     </>

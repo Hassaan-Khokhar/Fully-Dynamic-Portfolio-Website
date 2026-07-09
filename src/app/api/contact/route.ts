@@ -1,15 +1,25 @@
 import nodemailer from "nodemailer";
 import { createClient } from "@supabase/supabase-js";
+import { ContactSchema, sanitizeHtml } from "@/lib/validations";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, subject, message } = body;
-
-    // Validate
-    if (!name || !email || !subject || !message) {
-      return Response.json({ error: "All fields are required" }, { status: 400 });
+    
+    // Validate input using Zod
+    const validationResult = ContactSchema.safeParse(body);
+    if (!validationResult.success) {
+      return Response.json(
+        { error: validationResult.error.issues[0].message },
+        { status: 400 }
+      );
     }
+
+    // Sanitize inputs to prevent XSS
+    const name = sanitizeHtml(validationResult.data.name);
+    const email = sanitizeHtml(validationResult.data.email);
+    const subject = sanitizeHtml(validationResult.data.subject);
+    const message = sanitizeHtml(validationResult.data.message);
 
     // Initialize Supabase admin client
     const supabaseAdmin = createClient(

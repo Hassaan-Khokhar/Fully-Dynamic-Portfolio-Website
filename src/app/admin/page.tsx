@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FolderKanban, MessageSquare, TrendingUp, Clock, Loader2 } from "lucide-react";
+import { FolderKanban, MessageSquare, TrendingUp, Clock, Loader2, ShieldCheck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 export default function AdminOverview() {
@@ -26,12 +26,13 @@ export default function AdminOverview() {
     const { count: projectCount } = await supabase.from("projects").select("*", { count: "exact", head: true });
     const { count: messageCount } = await supabase.from("messages").select("*", { count: "exact", head: true });
     const { count: skillCount } = await supabase.from("skills").select("*", { count: "exact", head: true });
+    const { count: certCount } = await supabase.from("certifications").select("*", { count: "exact", head: true });
 
     setStats([
       { title: "Total Projects", value: (projectCount || 0).toString(), icon: FolderKanban, color: "text-neon-blue", bgColor: "bg-neon-blue/10" },
       { title: "Messages", value: (messageCount || 0).toString(), icon: MessageSquare, color: "text-neon-purple", bgColor: "bg-neon-purple/10" },
       { title: "Total Skills", value: (skillCount || 0).toString(), icon: TrendingUp, color: "text-green-400", bgColor: "bg-green-400/10" },
-      { title: "Last Updated", value: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }), icon: Clock, color: "text-orange-400", bgColor: "bg-orange-400/10" },
+      { title: "Certifications", value: (certCount || 0).toString(), icon: ShieldCheck, color: "text-orange-400", bgColor: "bg-orange-400/10" },
     ]);
 
     // Fetch recent projects

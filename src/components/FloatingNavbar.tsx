@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/#skills", label: "Skills", id: "skills" },
   { href: "/#projects", label: "Projects", id: "projects" },
   { href: "/#experience", label: "Experience", id: "experience" },
+  { href: "/#certifications", label: "Certifications", id: "certifications" },
 ];
 
 function MagneticItem({ children, className }: { children: React.ReactNode, className?: string }) {

@@ -2,6 +2,7 @@ import { Project } from "@/data/projects";
 import { SkillCategory } from "@/data/skills";
 import { EducationItem } from "@/data/education";
 import { ExperienceItem } from "@/data/experience";
+import { Certification } from "@/data/certifications";
 import { supabase } from "./supabase";
 
 export async function getPortfolioData() {
@@ -10,13 +11,15 @@ export async function getPortfolioData() {
     { data: skills },
     { data: education },
     { data: experience },
-    { data: contactInfo }
+    { data: contactInfo },
+    { data: certifications }
   ] = await Promise.all([
     supabase.from("projects").select("*").order("updated_at", { ascending: false }),
     supabase.from("skills").select("*").order("sort_order", { ascending: true }),
     supabase.from("education").select("*").order("sort_order", { ascending: true }),
     supabase.from("experience").select("*").order("sort_order", { ascending: true }),
     supabase.from("contact_info").select("*").single(),
+    supabase.from("certifications").select("*").order("sort_order", { ascending: true }),
   ]);
 
   return {
@@ -59,6 +62,18 @@ export async function getPortfolioData() {
       resume_url: "",
       about_text: ""
     },
+    certifications: (certifications || []).map((c): Certification => ({
+      id: c.id,
+      title: c.title,
+      issuer: c.issuer,
+      date: c.date,
+      credentialId: c.credential_id,
+      verifyUrl: c.verify_url,
+      fileUrl: c.file_url,
+      fileType: c.file_type as "image" | "pdf",
+      gradient: c.gradient,
+      sortOrder: c.sort_order,
+    })),
   };
 }
 
