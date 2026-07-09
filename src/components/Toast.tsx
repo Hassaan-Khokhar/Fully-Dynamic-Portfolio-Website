@@ -71,11 +71,11 @@ function ToastItem({ toast, onDone }: { toast: Toast; onDone: () => void }) {
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, x: 100, scale: 0.95 }}
-      className={`flex items-center gap-3 px-5 py-3 rounded-xl bg-[#0a0a0f]/95 backdrop-blur-xl border ${borders[toast.type]} shadow-2xl min-w-[280px]`}
+      className={`flex items-center gap-3 px-5 py-3 rounded-xl bg-[var(--surface-color)] bg-opacity-95 backdrop-blur-xl border ${borders[toast.type]} shadow-2xl min-w-[280px]`}
     >
       {icons[toast.type]}
-      <span className="text-sm text-white/80 font-medium flex-1">{toast.message}</span>
-      <button onClick={onDone} className="text-white/30 hover:text-white/60 transition-colors">
+      <span className="text-sm text-[var(--fg-color)] opacity-80 font-medium flex-1">{toast.message}</span>
+      <button onClick={onDone} className="text-[var(--fg-color)] opacity-30 hover:opacity-60 transition-colors">
         <X className="w-4 h-4" />
       </button>
     </motion.div>

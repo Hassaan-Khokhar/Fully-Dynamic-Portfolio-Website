@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 const PDFViewer = dynamic(() => import('./PDFViewer'), { ssr: false });
 
 const CSSCertificate = ({ cert, gradient, isShutter = false }: { cert: Certification, gradient: string, isShutter?: boolean }) => (
-  <div className={`absolute inset-0 flex flex-col items-center justify-between p-8 text-center transition-all duration-500 ${isShutter ? 'bg-black/80 backdrop-blur-xl' : 'bg-[#07070b]'}`}>
+  <div className={`absolute inset-0 flex flex-col items-center justify-between p-8 text-center transition-all duration-500 ${isShutter ? 'bg-black/80 backdrop-blur-xl' : 'bg-[#0a0a0f]'}`}>
     {isShutter && (
       <>
         {/* Premium glassmorphism glare */}
@@ -19,32 +19,32 @@ const CSSCertificate = ({ cert, gradient, isShutter = false }: { cert: Certifica
       </>
     )}
     <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${gradient} pointer-events-none z-10 rounded-t-2xl`} />
-    <div className="absolute inset-2 border border-white/5 rounded-xl pointer-events-none" />
-    <div className="absolute inset-0 opacity-[0.03] bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#fff_10px,#fff_11px)] pointer-events-none" />
+    <div className={`absolute inset-2 border ${isShutter ? 'border-white/5' : 'border-white/10'} rounded-xl pointer-events-none`} />
+    <div className="absolute inset-0 opacity-[0.03] bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,white_10px,white_11px)] pointer-events-none" />
     
     <div className="relative z-10 w-full flex justify-between items-start">
       <div className="text-left">
-        <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase mb-1 drop-shadow-md">Issuer</p>
+        <p className="text-[10px] tracking-[0.3em] uppercase mb-1 drop-shadow-md text-white/40">Issuer</p>
         <p className={`text-sm font-bold tracking-wide ${isShutter ? 'text-white' : 'text-neon-blue'} drop-shadow-lg`}>{cert.issuer}</p>
       </div>
-      <Award className={`w-10 h-10 ${isShutter ? 'text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]' : 'text-white/80 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]'}`} />
+      <Award className={`w-10 h-10 ${isShutter ? 'text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]' : 'text-white/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.1)]'}`} />
     </div>
     
     <div className="relative z-10 my-auto w-full">
-      <p className="text-[11px] tracking-[0.25em] text-white/50 uppercase mb-4 drop-shadow-md">Certificate of Completion</p>
-      <h3 className="text-2xl md:text-3xl font-black text-white leading-tight mb-2 font-serif tracking-wide drop-shadow-xl">{cert.title}</h3>
-      <p className="text-white/60 text-sm font-medium drop-shadow-md">Awarded to <span className="text-white">Hassaan Ali</span></p>
+      <p className="text-[11px] tracking-[0.25em] uppercase mb-4 drop-shadow-md text-white/50">Certificate of Completion</p>
+      <h3 className="text-2xl md:text-3xl font-black leading-tight mb-2 font-serif tracking-wide drop-shadow-xl text-white">{cert.title}</h3>
+      <p className="text-sm font-medium drop-shadow-md text-white/60">Awarded to <span className="text-white">Hassaan Ali</span></p>
     </div>
 
-    <div className="relative z-10 w-full flex justify-between items-end border-t border-white/10 pt-4">
+    <div className={`relative z-10 w-full flex justify-between items-end border-t pt-4 ${isShutter ? 'border-white/10' : 'border-white/5'}`}>
       <div className="text-left">
-        <p className="text-[10px] tracking-widest text-white/30 uppercase mb-1 drop-shadow-md">Issue Date</p>
-        <p className="text-xs text-white/70 font-mono drop-shadow-md">{cert.date}</p>
+        <p className="text-[10px] tracking-widest uppercase mb-1 drop-shadow-md text-white/30">Issue Date</p>
+        <p className="text-xs font-mono drop-shadow-md text-white/70">{cert.date}</p>
       </div>
       <div className="text-right flex flex-col items-end">
-        <Signature className="w-8 h-8 text-white/40 mb-1 drop-shadow-md" />
-        <div className="w-24 h-px bg-white/20 mb-1" />
-        <p className="text-[9px] text-white/40 uppercase tracking-widest drop-shadow-md">Authorized</p>
+        <Signature className="w-8 h-8 mb-1 drop-shadow-md text-white/40" />
+        <div className={`w-24 h-px mb-1 ${isShutter ? 'bg-white/20' : 'bg-white/10'}`} />
+        <p className="text-[9px] uppercase tracking-widest drop-shadow-md text-white/40">Authorized</p>
       </div>
     </div>
   </div>
@@ -157,7 +157,7 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
           {/* FRONT OF CARD */}
           <div
             style={{ backfaceVisibility: "hidden" }}
-            className={`absolute inset-0 w-full h-full rounded-2xl border-2 border-white/10 bg-[#07070b] overflow-hidden transition-all duration-500 ${isHovered ? "shadow-[0_0_50px_rgba(59,130,246,0.2)] border-white/20" : "shadow-2xl"}`}
+            className={`absolute inset-0 w-full h-full rounded-2xl border-2 border-[var(--glass-border-color)] bg-[var(--surface-color)] overflow-hidden transition-all duration-500 ${isHovered ? "shadow-[0_0_50px_rgba(59,130,246,0.2)] border-[var(--glass-border-color)]" : "shadow-[0_8px_30px_var(--glass-shadow-color)]"}`}
           >
             {hasFile ? (
               <div className="absolute inset-0 bg-white">
@@ -249,17 +249,17 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
               backfaceVisibility: "hidden", 
               transform: "rotateY(180deg) translateZ(1px)" 
             }}
-            className="absolute inset-0 w-full h-full rounded-2xl border border-neon-blue/30 bg-[#030305] p-8 flex flex-col justify-center items-center text-center shadow-[0_0_50px_rgba(59,130,246,0.1)]"
+            className="absolute inset-0 w-full h-full rounded-2xl border border-[var(--glass-border-color)] bg-[var(--surface-color)] p-8 flex flex-col justify-center items-center text-center shadow-[0_0_50px_rgba(59,130,246,0.1)]"
           >
-            <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] rounded-2xl" />
+            <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(var(--fg-color)_1px,transparent_1px)] [background-size:16px_16px] rounded-2xl" />
             <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradient} opacity-[0.05]`} />
             
             <ShieldCheck className="w-16 h-16 text-neon-blue mb-4 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
-            <h4 className="text-xl font-bold text-white mb-2 tracking-wide uppercase">Verified Record</h4>
-            <p className="text-white/50 text-sm mb-6">Issued: {cert.date}</p>
+            <h4 className="text-xl font-bold text-[var(--fg-color)] mb-2 tracking-wide uppercase">Verified Record</h4>
+            <p className="text-[var(--fg-color)] opacity-50 text-sm mb-6">Issued: {cert.date}</p>
             
-            <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 w-full mb-6">
-              <p className="text-[10px] text-white/40 mb-1 uppercase tracking-widest font-bold">Credential ID</p>
+            <div className="bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] rounded-xl px-4 py-3 w-full mb-6">
+              <p className="text-[10px] text-[var(--fg-color)] opacity-40 mb-1 uppercase tracking-widest font-bold">Credential ID</p>
               <p className="text-neon-purple font-mono text-sm break-all">{cert.credentialId || "—"}</p>
             </div>
             
@@ -269,13 +269,13 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="interactive-element flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-bold hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 transition-all duration-300 w-full justify-center"
+                className="interactive-element flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--fg-color)] text-[var(--bg-color)] font-bold hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:scale-105 transition-all duration-300 w-full justify-center"
               >
                 Verify on {cert.issuer}
                 <ExternalLink className="w-4 h-4" />
               </a>
             ) : (
-              <div className="px-6 py-3 rounded-full bg-white/10 text-white/40 font-bold w-full text-center text-sm">
+              <div className="px-6 py-3 rounded-full bg-[var(--glass-bg-color)] text-[var(--fg-color)] opacity-40 font-bold w-full text-center text-sm">
                 No verification link
               </div>
             )}
@@ -344,14 +344,14 @@ export default function CertificationsVault({ certifications }: { certifications
           viewport={{ once: true }}
           className="mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6 shadow-inner">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--glass-border-color)] bg-[var(--glass-bg-color)] mb-6 shadow-inner">
             <ShieldCheck className="w-5 h-5 text-neon-blue" />
-            <span className="text-sm font-bold tracking-widest uppercase text-white/80">Credentials</span>
+            <span className="text-sm font-bold tracking-widest uppercase text-[var(--fg-color)] opacity-80">Credentials</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-6">
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[var(--fg-color)] mb-6">
             Verified Certifications
           </h2>
-          <p className="text-white/60 max-w-2xl text-lg leading-relaxed">
+          <p className="text-[var(--fg-color)] opacity-60 max-w-2xl text-lg leading-relaxed">
             Official credentials proving my expertise. Click any certificate to inspect its unique cryptographic ID and verify its authenticity directly with the issuer.
           </p>
         </motion.div>

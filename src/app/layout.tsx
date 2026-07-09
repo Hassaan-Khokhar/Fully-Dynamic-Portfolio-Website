@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Script from "next/script";
 import CookieBanner from "@/components/CookieBanner";
+import { ThemeRegistry } from "@/components/ThemeRegistry";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -99,8 +100,8 @@ export default function RootLayout({
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang="en" className={`dark ${plusJakartaSans.variable}`}>
-      <body suppressHydrationWarning className="antialiased bg-background text-foreground min-h-screen selection:bg-neon-blue/30 selection:text-white">
+    <html lang="en" className={plusJakartaSans.variable} suppressHydrationWarning>
+      <body suppressHydrationWarning className="antialiased bg-background text-foreground min-h-screen selection:bg-neon-blue/30 selection:text-white transition-colors duration-500">
         {GA_ID && (
           <>
             <Script
@@ -119,10 +120,12 @@ export default function RootLayout({
             </Script>
           </>
         )}
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
-        <CookieBanner />
+        <ThemeRegistry>
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+          <CookieBanner />
+        </ThemeRegistry>
       </body>
     </html>
   );

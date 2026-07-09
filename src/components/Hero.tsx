@@ -86,11 +86,11 @@ export default function Hero({ contact }: { contact: any }) {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="text-neon-blue font-semibold tracking-widest uppercase mb-4">Hi, I&apos;m</p>
-          <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-4 text-white uppercase">
+          <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-4 text-[var(--fg-color)] uppercase">
             {(contact as any).first_name || "HASSAAN"} <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple capitalize">{(contact as any).last_name || "Ali"}</span>
           </h1>
-          <h2 className="text-2xl md:text-3xl text-white/70 mb-6 font-light">
-            I&apos;m a <span className="font-semibold text-white">
+          <h2 className="text-2xl md:text-3xl text-[var(--fg-color)] opacity-80 mb-6 font-light">
+            I&apos;m a <span className="font-semibold text-[var(--fg-color)] opacity-100">
               {displayText}
               <motion.span
                 animate={{ opacity: [1, 0] }}
@@ -101,14 +101,14 @@ export default function Hero({ contact }: { contact: any }) {
               </motion.span>
             </span>
           </h2>
-          <p className="text-white/60 text-lg leading-relaxed mb-8 max-w-lg">
+          <p className="text-[var(--fg-color)] opacity-70 text-lg leading-relaxed mb-8 max-w-lg">
             {contact.hero_bio || "Computer Science student at COMSATS University Islamabad. Specialized in architecting robust database-driven backends and developing fluid, cross-platform mobile ecosystems."}
           </p>
           
           <div className="flex flex-wrap items-center gap-4 mb-8">
             <MagneticButton
               href="#projects"
-              className="interactive-element bg-white text-black px-8 py-3 rounded-full font-semibold hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.3)] border border-white"
+              className="interactive-element bg-[var(--fg-color)] text-[var(--bg-color)] px-8 py-3 rounded-full font-semibold hover:opacity-80 transition shadow-[0_0_20px_rgba(255,255,255,0.1)] border border-[var(--fg-color)]"
             >
               View Work
             </MagneticButton>
@@ -116,7 +116,7 @@ export default function Hero({ contact }: { contact: any }) {
             {contact.resume_url && (
               <MagneticButton
                 href={contact.resume_url}
-                className="interactive-element border border-white/20 text-white px-8 py-3 rounded-full font-semibold hover:bg-white/5 transition flex items-center justify-center gap-2 whitespace-nowrap"
+                className="interactive-element border border-transparent bg-gradient-to-r from-neon-purple to-neon-blue text-white px-8 py-3 rounded-full font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
               >
                 <Download className="w-4 h-4 shrink-0" />
                 <span>Download Resume</span>
@@ -126,17 +126,17 @@ export default function Hero({ contact }: { contact: any }) {
 
           <div className="flex items-center gap-6">
             {contact.github && (
-              <a href={contact.github} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
+              <a href={contact.github} target="_blank" rel="noopener noreferrer" className="text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-opacity">
                 <GithubIcon className="w-6 h-6" />
               </a>
             )}
             {contact.linkedin && (
-              <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
+              <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-opacity">
                 <LinkedinIcon className="w-6 h-6" />
               </a>
             )}
             {contact.email && (
-              <a href={`mailto:${contact.email}`} className="text-white/40 hover:text-white transition-colors">
+              <a href={`mailto:${contact.email}`} className="text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-opacity">
                 <Mail className="w-6 h-6" />
               </a>
             )}
@@ -151,7 +151,7 @@ export default function Hero({ contact }: { contact: any }) {
           className="flex justify-center items-center"
         >
           <div className="relative w-[350px] h-[350px] flex justify-center items-center interactive-element group">
-            <div className="w-full h-full bg-gradient-to-br from-neon-blue/20 to-neon-purple/20 backdrop-blur-md border-2 border-white/10 shadow-[0_0_40px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_60px_rgba(139,92,246,0.5)] group-hover:scale-105 animate-morph overflow-hidden relative transition-all duration-700 ease-out">
+            <div className="w-full h-full bg-gradient-to-br from-neon-blue/20 to-neon-purple/20 backdrop-blur-md border-2 border-[var(--glass-border-color)] shadow-[0_0_40px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_60px_rgba(139,92,246,0.5)] group-hover:scale-105 animate-morph overflow-hidden relative transition-all duration-700 ease-out">
               <Image
                 src={contact.hero_image || "/profile.png"}
                 alt="Hassaan Ali"

@@ -18,17 +18,17 @@ const LinkedinIcon = ({ className }: { className?: string }) => (
 
 export default function Footer({ contact }: { contact: typeof contactInfo }) {
   return (
-    <footer id="contact" className="relative overflow-hidden pt-12 md:pt-24 pb-8 bg-[#030305] border-t border-white/5">
+    <footer id="contact" className="relative overflow-hidden pt-12 md:pt-24 pb-8 bg-[var(--bg-color)] border-t border-[var(--glass-border-color)]">
       {/* Subtle ambient light */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-neon-blue/5 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <div className="text-center mb-12">
-          <div className="inline-block border border-white/10 bg-white/5 rounded-full px-6 py-2 mb-8 text-sm font-bold tracking-widest uppercase text-white/80">
+          <div className="inline-block border border-[var(--glass-border-color)] bg-[var(--glass-bg-color)] rounded-full px-6 py-2 mb-8 text-sm font-bold tracking-widest uppercase text-[var(--fg-color)] opacity-80">
             Get In Touch
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight">Let&apos;s Connect</h2>
-          <p className="text-white/60 max-w-2xl mx-auto text-lg leading-relaxed">
+          <h2 className="text-4xl md:text-6xl font-bold text-[var(--fg-color)] mb-8 tracking-tight">Let&apos;s Connect</h2>
+          <p className="text-[var(--fg-color)] opacity-60 max-w-2xl mx-auto text-lg leading-relaxed">
             I&apos;m currently seeking a challenging opportunity to apply my technical skills. Whether you have a question, a project idea, or just want to say hi, I&apos;ll try my best to get back to you!
           </p>
         </div>
@@ -41,52 +41,52 @@ export default function Footer({ contact }: { contact: typeof contactInfo }) {
           
           {/* Location */}
           <div className="flex flex-col items-center text-center group interactive-element">
-            <MagneticButton href="#" className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-white/10 transition-all duration-500 ease-out shadow-lg">
+            <MagneticButton href="#" className="w-20 h-20 rounded-full bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] flex items-center justify-center mb-6 group-hover:bg-[var(--glass-border-color)] transition-all duration-500 ease-out shadow-lg">
               <MapPin className="w-8 h-8 text-neon-blue" />
             </MagneticButton>
-            <h3 className="text-xl font-bold text-white mb-2">Location</h3>
-            <p className="text-white/50">{contact.location}</p>
+            <h3 className="text-xl font-bold text-[var(--fg-color)] mb-2">Location</h3>
+            <p className="text-[var(--fg-color)] opacity-50">{contact.location}</p>
           </div>
 
           {/* Email */}
           <div className="flex flex-col items-center text-center group interactive-element">
-            <MagneticButton href={`mailto:${contact.email}`} className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-white/10 transition-all duration-500 ease-out shadow-lg">
+            <MagneticButton href={`mailto:${contact.email}`} className="w-20 h-20 rounded-full bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] flex items-center justify-center mb-6 group-hover:bg-[var(--glass-border-color)] transition-all duration-500 ease-out shadow-lg">
               <Mail className="w-8 h-8 text-neon-purple" />
             </MagneticButton>
-            <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-            <p className="text-white/50">{contact.email}</p>
+            <h3 className="text-xl font-bold text-[var(--fg-color)] mb-2">Email</h3>
+            <p className="text-[var(--fg-color)] opacity-50">{contact.email}</p>
           </div>
 
           {/* Phone */}
           <div className="flex flex-col items-center text-center group interactive-element">
-            <MagneticButton href={`tel:${contact.phone.replace(/\s/g, '')}`} className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-white/10 transition-all duration-500 ease-out shadow-lg">
+            <MagneticButton href={`tel:${contact.phone.replace(/\s/g, '')}`} className="w-20 h-20 rounded-full bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] flex items-center justify-center mb-6 group-hover:bg-[var(--glass-border-color)] transition-all duration-500 ease-out shadow-lg">
               <Phone className="w-8 h-8 text-neon-blue" />
             </MagneticButton>
-            <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-            <p className="text-white/50">{contact.phone}</p>
+            <h3 className="text-xl font-bold text-[var(--fg-color)] mb-2">Phone</h3>
+            <p className="text-[var(--fg-color)] opacity-50">{contact.phone}</p>
           </div>
 
         </div>
 
         {/* Bottom Footer */}
-        <div className="pt-12 border-t border-white/10 flex flex-col items-center justify-center">
-          <Link href="#home" className="text-4xl font-black tracking-tighter text-white mb-8 interactive-element inline-block uppercase">
+        <div className="pt-12 border-t border-[var(--glass-border-color)] flex flex-col items-center justify-center">
+          <Link href="#home" className="text-4xl font-black tracking-tighter text-[var(--fg-color)] mb-8 interactive-element inline-block uppercase">
             {(contact as any).first_name || "HASSAAN"}<span className="text-neon-blue">.</span>
           </Link>
 
           <div className="flex items-center gap-8 mb-8">
-            <MagneticButton href={contact.github || "#"} className="text-white/50 hover:text-white transition-all duration-500 ease-out interactive-element inline-block">
+            <MagneticButton href={contact.github || "#"} className="text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-all duration-500 ease-out interactive-element inline-block">
               <GithubIcon className="w-7 h-7" />
             </MagneticButton>
-            <MagneticButton href={contact.linkedin || "#"} className="text-white/50 hover:text-white transition-all duration-500 ease-out interactive-element inline-block">
+            <MagneticButton href={contact.linkedin || "#"} className="text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-all duration-500 ease-out interactive-element inline-block">
               <LinkedinIcon className="w-7 h-7" />
             </MagneticButton>
-            <MagneticButton href={`mailto:${contact.email}`} className="text-white/50 hover:text-white transition-all duration-500 ease-out interactive-element inline-block">
+            <MagneticButton href={`mailto:${contact.email}`} className="text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-all duration-500 ease-out interactive-element inline-block">
               <Mail className="w-7 h-7" />
             </MagneticButton>
           </div>
 
-          <p className="text-sm text-white/40">
+          <p className="text-sm text-[var(--fg-color)] opacity-40">
             © 2026 {(contact as any).first_name || "Hassaan"} {(contact as any).last_name || "Ali"}. All rights reserved.
           </p>
         </div>

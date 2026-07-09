@@ -70,7 +70,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         boxShadow,
         transformStyle: "preserve-3d"
       }}
-      className={`interactive-element bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 items-center group relative w-full cursor-none`}
+      className={`interactive-element bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] rounded-3xl p-8 md:p-12 flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 items-center group relative w-full cursor-none`}
     >
       <div className="w-full md:w-1/2" style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}>
         <div className="flex flex-wrap gap-2 mb-4">
@@ -83,8 +83,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </span>
           ))}
         </div>
-        <h3 className={`text-3xl font-bold mb-4 text-white transition-all duration-500 ease-out ${accent.hover}`}>{project.title}</h3>
-        <p className="text-white/60 mb-6 leading-relaxed">
+        <h3 className={`text-3xl font-bold mb-4 text-[var(--fg-color)] transition-all duration-500 ease-out ${accent.hover}`}>{project.title}</h3>
+        <p className="text-[var(--fg-color)] opacity-60 mb-6 leading-relaxed">
           {project.description}
         </p>
         <Link
@@ -95,11 +95,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
         </Link>
       </div>
-      <Link href={`/projects/${project.id}`} className="w-full md:w-1/2 h-64 bg-black/50 rounded-2xl border border-white/10 flex justify-center items-center overflow-hidden interactive-element cursor-none block relative z-10" style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}>
+      <Link href={`/projects/${project.id}`} className="w-full md:w-1/2 h-64 bg-[var(--surface-color)] rounded-2xl border border-[var(--glass-border-color)] flex justify-center items-center overflow-hidden interactive-element cursor-none block relative z-10" style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}>
         {project.images && project.images.length > 0 ? (
-          <Image src={project.images[0]} alt={project.title} fill className="object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
+          <Image src={project.images[0]} alt={project.title} fill className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
         ) : (
-          <span className="text-white/40 font-semibold tracking-widest group-hover:scale-110 group-hover:text-white transition-all duration-500 ease-out">
+          <span className="text-[var(--fg-color)] opacity-40 font-semibold tracking-widest group-hover:scale-110 group-hover:opacity-100 transition-all duration-500 ease-out">
             {project.action}
           </span>
         )}
@@ -110,7 +110,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   return (
-    <section id="projects" className="py-24 bg-white/[0.02] relative z-10">
+    <section id="projects" className="py-24 bg-[var(--glass-bg-color)] relative z-10">
       <div className="container mx-auto px-6 max-w-7xl">
         <motion.h3 
           initial={{ opacity: 0, y: 50 }}
@@ -126,7 +126,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl font-bold mb-16 text-white"
+          className="text-4xl font-bold mb-16 text-[var(--fg-color)]"
         >
           Featured Systems
         </motion.h2>

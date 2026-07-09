@@ -27,7 +27,7 @@ export default async function ProjectPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#030305] text-white relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--fg-color)] relative overflow-hidden">
       <CustomCursor />
       <FloatingNavbar />
 
@@ -41,7 +41,7 @@ export default async function ProjectPage({
           <ProjectDetailClient>
             <Link
               href="/#projects"
-              className="interactive-element inline-flex items-center gap-2 text-white/50 hover:text-white transition-all duration-500 ease-out mb-12 group"
+              className="interactive-element inline-flex items-center gap-2 text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-all duration-500 ease-out mb-12 group"
             >
               <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
               <span className="text-sm font-medium tracking-wide">Back to Portfolio</span>
@@ -52,7 +52,7 @@ export default async function ProjectPage({
               {project.tags.map((tag, i) => (
                 <span
                   key={tag}
-                  className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider ${project.tagColors[i] || "bg-white/5 border border-white/10 text-white/50"}`}
+                  className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider ${project.tagColors[i] || "bg-[var(--surface-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] shadow-sm"}`}
                 >
                   {tag.toUpperCase()}
                 </span>
@@ -60,12 +60,12 @@ export default async function ProjectPage({
             </div>
 
             {/* Title */}
-            <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white mb-8">
+            <h1 className="text-5xl md:text-7xl font-black tracking-tight text-[var(--fg-color)] mb-8">
               {project.title}
             </h1>
 
             {/* Long Description */}
-            <p className="text-xl text-white/60 leading-relaxed mb-16 max-w-3xl">
+            <p className="text-xl text-[var(--fg-color)] opacity-80 font-medium leading-relaxed mb-16 max-w-3xl">
               {project.longDescription}
             </p>
 
@@ -74,7 +74,7 @@ export default async function ProjectPage({
               <div className="mb-20">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {project.images.map((img, i) => (
-                    <div key={i} className="rounded-2xl border border-white/10 overflow-hidden bg-white/5 shadow-2xl">
+                    <div key={i} className="rounded-2xl border border-[var(--glass-border-color)] overflow-hidden bg-[var(--glass-bg-color)] shadow-[0_8px_30px_var(--glass-shadow-color)]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={img} alt={`${project.title} screenshot ${i + 1}`} className="w-full h-auto object-cover" />
                     </div>
@@ -101,7 +101,7 @@ export default async function ProjectPage({
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="interactive-element inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/5 text-white font-semibold text-sm hover:bg-white/10 transition-all duration-500 ease-out"
+                  className="interactive-element inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--fg-color)] text-[var(--bg-color)] shadow-[0_0_15px_var(--glass-shadow-color)] font-bold text-sm hover:opacity-80 transition-all duration-500 ease-out"
                 >
                   <GithubIcon className="w-4 h-4" />
                   View on GitHub
@@ -111,17 +111,17 @@ export default async function ProjectPage({
 
             {/* Features */}
             <div className="mb-20">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6">
-                <span className="text-sm font-bold tracking-widest uppercase text-white/80">Key Features</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--glass-border-color)] bg-[var(--surface-color)] mb-6 shadow-sm">
+                <span className="text-sm font-bold tracking-widest uppercase text-[var(--fg-color)]">Key Features</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {project.features.map((feature, i) => (
                   <div
                     key={i}
-                    className="glass p-6 rounded-2xl border border-white/5 hover:bg-white/5 transition-all duration-500 ease-out hover:scale-[1.02] interactive-element cursor-none flex items-start gap-3"
+                    className="glass p-6 rounded-2xl border border-[var(--glass-border-color)] bg-[var(--surface-color)] hover:bg-[var(--surface-color)] transition-all duration-500 ease-out hover:scale-[1.02] interactive-element cursor-none flex items-start gap-3 shadow-[0_8px_30px_var(--glass-shadow-color)] group"
                   >
-                    <ChevronRight className="w-5 h-5 text-neon-blue mt-0.5 shrink-0" />
-                    <span className="text-white/70 leading-relaxed">{feature}</span>
+                    <ChevronRight className="w-5 h-5 text-neon-blue mt-0.5 shrink-0 group-hover:translate-x-1 transition-transform" />
+                    <span className="text-[var(--fg-color)] opacity-90 font-medium leading-relaxed">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -129,14 +129,14 @@ export default async function ProjectPage({
 
             {/* Tech Stack */}
             <div className="mb-20">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6">
-                <span className="text-sm font-bold tracking-widest uppercase text-white/80">Tech Stack</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--glass-border-color)] bg-[var(--surface-color)] mb-6 shadow-sm">
+                <span className="text-sm font-bold tracking-widest uppercase text-[var(--fg-color)]">Tech Stack</span>
               </div>
               <div className="flex flex-wrap gap-3">
                 {project.techStack.map((tech) => (
                   <span
                     key={tech}
-                    className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-white/80 font-medium text-sm hover:bg-white/10 transition-all duration-500 ease-out"
+                    className="px-5 py-2.5 rounded-full bg-[var(--surface-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] font-bold text-sm hover:bg-[var(--fg-color)] hover:text-[var(--bg-color)] hover:border-transparent transition-all duration-300 ease-out shadow-[0_4px_15px_var(--glass-shadow-color)] cursor-default"
                   >
                     {tech}
                   </span>
@@ -145,10 +145,10 @@ export default async function ProjectPage({
             </div>
 
             {/* Back to portfolio */}
-            <div className="pt-12 border-t border-white/10">
+            <div className="pt-12 border-t border-[var(--glass-border-color)]">
               <Link
                 href="/#projects"
-                className="interactive-element inline-flex items-center gap-2 text-white/50 hover:text-white transition-all duration-500 ease-out group"
+                className="interactive-element inline-flex items-center gap-2 text-[var(--fg-color)] opacity-50 hover:opacity-100 transition-all duration-500 ease-out group"
               >
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
                 <span className="font-medium">Back to Portfolio</span>

@@ -21,11 +21,11 @@ export default function About({ contact }: { contact: any }) {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-4xl md:text-5xl font-black mb-8 tracking-tight text-white uppercase">
+          <h2 className="text-4xl md:text-5xl font-black mb-8 tracking-tight text-[var(--fg-color)] uppercase">
             About <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple">Me</span>
           </h2>
           
-          <p className="text-lg md:text-xl text-white/70 leading-relaxed text-left whitespace-pre-line">
+          <p className="text-lg md:text-xl text-[var(--fg-color)] opacity-70 leading-relaxed text-left whitespace-pre-line">
             {aboutText}
           </p>
         </motion.div>

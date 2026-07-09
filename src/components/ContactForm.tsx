@@ -56,7 +56,7 @@ export default function ContactForm() {
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out cursor-none"
+            className="w-full px-6 py-4 rounded-2xl bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] placeholder-[var(--fg-color)] placeholder-opacity-30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out cursor-none"
           />
         </div>
         <div>
@@ -67,7 +67,7 @@ export default function ContactForm() {
             required
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out cursor-none"
+            className="w-full px-6 py-4 rounded-2xl bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] placeholder-[var(--fg-color)] placeholder-opacity-30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out cursor-none"
           />
         </div>
       </div>
@@ -79,7 +79,7 @@ export default function ContactForm() {
           required
           value={formData.subject}
           onChange={handleChange}
-          className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out cursor-none"
+          className="w-full px-6 py-4 rounded-2xl bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] placeholder-[var(--fg-color)] placeholder-opacity-30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out cursor-none"
         />
       </div>
       <div className="mb-6">
@@ -90,7 +90,7 @@ export default function ContactForm() {
           required
           value={formData.message}
           onChange={handleChange}
-          className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out resize-none cursor-none"
+          className="w-full px-6 py-4 rounded-2xl bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] placeholder-[var(--fg-color)] placeholder-opacity-30 focus:border-neon-blue focus:outline-none focus:ring-1 focus:ring-neon-blue/50 transition-all duration-500 ease-out resize-none cursor-none"
         />
       </div>
 

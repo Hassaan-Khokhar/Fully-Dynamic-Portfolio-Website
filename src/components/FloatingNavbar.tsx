@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePres
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navLinks = [
   { href: "/#home", label: "Home", id: "home" },
@@ -54,21 +55,13 @@ export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?
   const [activeSection, setActiveSection] = useState("home");
   const [isOpen, setIsOpen] = useState(false);
   
-  const backgroundColor = useTransform(
-    scrollY,
-    [0, 100],
-    ["rgba(3, 3, 5, 0)", "rgba(3, 3, 5, 0.7)"]
-  );
-  const backdropFilter = useTransform(
-    scrollY,
-    [0, 100],
-    ["blur(0px)", "blur(24px)"]
-  );
-  const borderColor = useTransform(
-    scrollY,
-    [0, 100],
-    ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.08)"]
-  );
+  const [isScrolled, setIsScrolled] = useState(false);
+  
+  useEffect(() => {
+    return scrollY.on("change", (latest) => {
+      setIsScrolled(latest > 50);
+    });
+  }, [scrollY]);
 
   useEffect(() => {
     const observerOptions = {
@@ -98,30 +91,33 @@ export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?
 
   return (
     <motion.nav
-      style={{ backgroundColor, backdropFilter, borderBottomColor: borderColor }}
-      className="fixed top-0 w-full z-50 transition-all duration-500 ease-out border-b border-transparent py-2"
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ease-out border-b py-2 ${
+        isScrolled 
+          ? "bg-[var(--surface-color)] bg-opacity-80 backdrop-blur-2xl border-[var(--glass-border-color)] shadow-xl" 
+          : "bg-transparent border-transparent"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
         <MagneticItem>
-          <Link href="/" className="interactive-element text-2xl font-extrabold tracking-tighter text-white inline-block uppercase">
+          <Link href="/" className="interactive-element text-2xl font-extrabold tracking-tighter text-[var(--fg-color)] inline-block uppercase">
             {first_name}<span className="text-neon-blue">.</span>
           </Link>
         </MagneticItem>
         
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center space-x-1 glass p-1.5 rounded-full border border-white/5 shadow-2xl">
+        <div className="hidden md:flex items-center space-x-1 glass p-1.5 rounded-full border border-[var(--glass-border-color)] shadow-2xl">
           {navLinks.map((link) => (
             <div key={link.id} className="relative px-4 py-2 group">
               <Link 
                 href={link.href} 
-                className={`relative z-10 interactive-element text-xs font-bold tracking-widest uppercase transition-all duration-300 ${activeSection === link.id ? "text-white" : "text-white/40 hover:text-white/70"}`}
+                className={`relative z-10 interactive-element text-xs font-bold tracking-widest uppercase transition-all duration-300 text-[var(--fg-color)] ${activeSection === link.id ? "opacity-100" : "opacity-40 hover:opacity-70"}`}
               >
                 {link.label}
               </Link>
               {activeSection === link.id && (
                 <motion.div
                   layoutId="nav-underline"
-                  className="absolute inset-0 bg-gradient-to-r from-neon-blue/20 to-neon-purple/20 rounded-full border border-white/10 z-0"
+                  className="absolute inset-0 bg-gradient-to-r from-neon-blue/20 to-neon-purple/20 rounded-full border border-[var(--glass-border-color)] z-0"
                   transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                 />
               )}
@@ -129,20 +125,25 @@ export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?
           ))}
         </div>
 
-        {/* Let's Talk Desktop */}
-        <MagneticItem className="hidden md:block">
-          <Link href="/#contact" className={`interactive-element px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-500 ease-out inline-block border ${activeSection === "contact" ? "bg-neon-blue text-white border-neon-blue shadow-[0_0_20px_rgba(59,130,246,0.3)]" : "border-neon-blue/40 text-neon-blue hover:bg-neon-blue hover:text-white"}`}>
-            LET&apos;S TALK
-          </Link>
-        </MagneticItem>
+        {/* Right Action Area */}
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          
+          {/* Let's Talk Desktop */}
+          <MagneticItem className="hidden md:block">
+            <Link href="/#contact" className={`interactive-element px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-500 ease-out inline-block border ${activeSection === "contact" ? "bg-neon-blue text-white border-neon-blue shadow-[0_0_20px_rgba(59,130,246,0.3)]" : "border-neon-blue/40 text-neon-blue hover:bg-neon-blue hover:text-white"}`}>
+              LET&apos;S TALK
+            </Link>
+          </MagneticItem>
 
-        {/* Mobile Toggle */}
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 text-white/70 hover:text-white transition-colors"
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          {/* Mobile Toggle */}
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 text-[var(--fg-color)] opacity-70 hover:opacity-100 transition-opacity"
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -152,7 +153,7 @@ export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#030305]/95 backdrop-blur-2xl border-b border-white/5 overflow-hidden"
+            className="md:hidden bg-[var(--surface-color)] bg-opacity-95 backdrop-blur-2xl border-b border-[var(--glass-border-color)] overflow-hidden"
           >
             <div className="flex flex-col p-6 space-y-4">
               {navLinks.map((link) => (
@@ -160,7 +161,7 @@ export default function FloatingNavbar({ first_name = "HASSAAN" }: { first_name?
                   key={link.id}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`text-sm font-bold tracking-widest uppercase transition-colors ${activeSection === link.id ? "text-neon-blue" : "text-white/60 hover:text-white"}`}
+                  className={`text-sm font-bold tracking-widest uppercase transition-colors ${activeSection === link.id ? "text-neon-blue" : "text-[var(--fg-color)] opacity-60 hover:opacity-100"}`}
                 >
                   {link.label}
                 </Link>
