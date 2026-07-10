@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Script from "next/script";
 import CookieBanner from "@/components/CookieBanner";
 import { ThemeRegistry } from "@/components/ThemeRegistry";
+import ChatBot from "@/components/ChatBot";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -125,6 +126,7 @@ export default function RootLayout({
             {children}
           </SmoothScroll>
           <CookieBanner />
+          <ChatBot />
         </ThemeRegistry>
       </body>
     </html>
