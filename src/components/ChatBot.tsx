@@ -203,20 +203,17 @@ export default function ChatBot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 60, scale: 0.9 }}
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 40, scale: 0.9 }}
-            transition={{ type: "spring", damping: 22, stiffness: 280 }}
-            className="fixed bottom-4 right-4 z-50 w-[370px] sm:w-[400px] max-w-[calc(100vw-2rem)] h-[580px] max-h-[calc(100vh-2rem)] rounded-3xl flex flex-col overflow-hidden border border-[var(--glass-border-color)] shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+            exit={{ opacity: 0, y: 40, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="fixed bottom-4 right-4 z-50 w-[370px] sm:w-[400px] max-w-[calc(100vw-2rem)] h-[580px] max-h-[calc(100vh-2rem)] rounded-3xl flex flex-col overflow-hidden border border-[var(--glass-border-color)] shadow-2xl sm:shadow-[0_20px_60px_rgba(0,0,0,0.4)] bg-[var(--surface-color)] sm:bg-[var(--surface-color)]/90 backdrop-blur-none sm:backdrop-blur-md"
             style={{ 
-              background: "var(--surface-color)", 
-              backdropFilter: "blur(12px)", 
-              WebkitBackdropFilter: "blur(12px)",
               willChange: "transform, opacity" 
             }}
           >
             {/* ─── HEADER ─── */}
-            <div className="relative bg-gradient-to-r from-neon-purple via-neon-blue to-neon-purple bg-[length:200%_100%] animate-[gradientShift_4s_ease_infinite] p-4 flex items-center justify-between shrink-0">
+            <div className="relative bg-gradient-to-r from-neon-purple via-neon-blue to-neon-purple sm:animate-[gradientShift_4s_ease_infinite] sm:bg-[length:200%_100%] p-4 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <HeaderAvatar />
                 <div>
@@ -239,6 +236,7 @@ export default function ChatBot() {
 
             {/* ─── MESSAGES AREA ─── */}
             <div 
+              data-lenis-prevent="true"
               className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 space-y-3 custom-scrollbar" 
               style={{ background: "var(--bg-color)", WebkitOverflowScrolling: "touch" }}
             >
@@ -272,10 +270,10 @@ export default function ChatBot() {
                   className="flex justify-start items-end gap-2"
                 >
                   <SmallAvatar />
-                  <div className="bg-[var(--surface-color)] border border-[var(--glass-border-color)] px-4 py-3 rounded-2xl rounded-bl-md flex gap-1.5">
-                    <motion.div className="w-2 h-2 bg-neon-purple rounded-full" animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} />
-                    <motion.div className="w-2 h-2 bg-neon-blue rounded-full" animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.15 }} />
-                    <motion.div className="w-2 h-2 bg-neon-purple rounded-full" animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.3 }} />
+                  <div className="bg-[var(--surface-color)] border border-[var(--glass-border-color)] px-4 py-3 rounded-2xl rounded-bl-md flex gap-1.5 items-center h-9">
+                    <div className="w-1.5 h-1.5 bg-neon-purple rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <div className="w-1.5 h-1.5 bg-neon-blue rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <div className="w-1.5 h-1.5 bg-neon-purple rounded-full animate-bounce" />
                   </div>
                 </motion.div>
               )}
