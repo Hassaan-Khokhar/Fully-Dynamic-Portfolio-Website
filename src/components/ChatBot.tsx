@@ -208,9 +208,12 @@ export default function ChatBot() {
             exit={{ opacity: 0, y: 40, scale: 0.9 }}
             transition={{ type: "spring", damping: 22, stiffness: 280 }}
             className="fixed bottom-4 right-4 z-50 w-[370px] sm:w-[400px] max-w-[calc(100vw-2rem)] h-[580px] max-h-[calc(100vh-2rem)] rounded-3xl flex flex-col overflow-hidden border border-[var(--glass-border-color)] shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
-            style={{ background: "var(--surface-color)", backdropFilter: "blur(20px)" }}
-            onWheel={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
+            style={{ 
+              background: "var(--surface-color)", 
+              backdropFilter: "blur(12px)", 
+              WebkitBackdropFilter: "blur(12px)",
+              willChange: "transform, opacity" 
+            }}
           >
             {/* ─── HEADER ─── */}
             <div className="relative bg-gradient-to-r from-neon-purple via-neon-blue to-neon-purple bg-[length:200%_100%] animate-[gradientShift_4s_ease_infinite] p-4 flex items-center justify-between shrink-0">
@@ -236,10 +239,8 @@ export default function ChatBot() {
 
             {/* ─── MESSAGES AREA ─── */}
             <div 
-              className="flex-1 min-h-0 overflow-y-auto overscroll-none p-4 space-y-3 custom-scrollbar" 
-              style={{ background: "var(--bg-color)" }}
-              onWheel={(e) => e.stopPropagation()}
-              onTouchMove={(e) => e.stopPropagation()}
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 space-y-3 custom-scrollbar" 
+              style={{ background: "var(--bg-color)", WebkitOverflowScrolling: "touch" }}
             >
               {messages.map((msg: any, idx: number) => (
                 <motion.div
