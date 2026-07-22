@@ -81,18 +81,18 @@ export default function SkillsBentoGrid({ categories }: { categories: SkillCateg
                   `,
                 }}
               />
-              <div className="relative h-full w-full rounded-[23px] bg-[var(--surface-color)] backdrop-blur-3xl p-6 flex flex-col z-10 border border-[var(--glass-border-color)] shadow-[0_8px_30px_var(--glass-shadow-color)] group-hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)] transition-shadow duration-500">
-                <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-[var(--glass-bg-color)] rounded-xl group-hover:scale-110 transition-all duration-500 ease-out shadow-inner">
+              <div className="relative h-full w-full rounded-[23px] bg-[var(--surface-color)] bg-gradient-to-br from-transparent to-[var(--glass-bg-color)] backdrop-blur-3xl p-6 md:p-8 flex flex-col z-10 border border-[var(--glass-border-color)] shadow-[0_8px_30px_var(--glass-shadow-color)] group-hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)] transition-all duration-500">
+                <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-[var(--glass-bg-color)] rounded-2xl group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all duration-500 ease-out border border-[var(--glass-border-color)]">
                   {iconMap[category.icon as string] || iconMap.code}
                 </div>
-                <h3 className="text-xl font-bold text-[var(--fg-color)]">{category.title}</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-[var(--fg-color)] tracking-tight">{category.title}</h3>
               </div>
-              <div className="flex flex-wrap gap-2 mt-auto">
+              <div className="flex flex-wrap gap-2.5">
                 {category.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-3 py-1 text-sm font-medium rounded-full bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] opacity-80 hover:opacity-100 hover:bg-[var(--fg-color)] hover:text-[var(--bg-color)] hover:border-transparent cursor-default transition-all duration-300 shadow-sm"
+                    className="px-3.5 py-1.5 md:px-4 md:py-2 text-[13px] md:text-sm font-semibold rounded-xl bg-[var(--glass-bg-color)] border border-[var(--glass-border-color)] text-[var(--fg-color)] opacity-80 hover:opacity-100 hover:bg-[var(--fg-color)] hover:text-[var(--bg-color)] hover:-translate-y-0.5 hover:shadow-md cursor-default transition-all duration-300"
                   >
                     {skill}
                   </span>
