@@ -60,14 +60,14 @@ export default function SkillsBentoGrid({ categories }: { categories: SkillCateg
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-50px" }}
-          className="group relative grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto md:auto-rows-[200px]"
+          className="group relative grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto grid-flow-row-dense"
           onMouseMove={handleMouseMove}
         >
           {displayCategories.map((category) => (
             <motion.div
               key={category.id}
               variants={itemVariants}
-              className={`relative glass rounded-3xl p-px hover:bg-[var(--glass-bg-color)] transition-all duration-500 ease-out hover:scale-[1.02] flex flex-col overflow-hidden min-h-[200px] md:min-h-0 ${category.className || "md:col-span-1 md:row-span-1"}`}
+              className={`relative glass rounded-3xl p-px hover:bg-[var(--glass-bg-color)] transition-all duration-500 ease-out hover:scale-[1.02] flex flex-col overflow-hidden min-h-[200px] ${category.className || "md:col-span-1 md:row-span-1"}`}
             >
               <motion.div
                 className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
