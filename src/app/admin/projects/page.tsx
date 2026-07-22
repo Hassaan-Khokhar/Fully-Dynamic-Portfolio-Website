@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Pencil, Trash2, X, Save, FolderKanban, Upload, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Save, FolderKanban, Upload, Image as ImageIcon, Loader2, GripVertical } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Project } from "@/data/projects";
 import { useToast } from "@/components/Toast";
@@ -17,6 +17,11 @@ export default function AdminProjectsPage() {
   const [pendingUploads, setPendingUploads] = useState<{file: File, preview: string}[]>([]);
   const [pendingDeletions, setPendingDeletions] = useState<string[]>([]);
   const { showToast } = useToast();
+
+  // Drag-and-drop state
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const dragNodeRef = useRef<HTMLDivElement | null>(null);
 
   const emptyProject: Project = {
     id: "",
@@ -39,12 +44,66 @@ export default function AdminProjectsPage() {
     fetchProjects();
   }, []);
 
+  // ═══════════════════════════════════════════
+  // Drag & Drop Handlers
+  // ═══════════════════════════════════════════
+
+  const handleDragStart = (index: number, e: React.DragEvent<HTMLDivElement>) => {
+    setDragIndex(index);
+    dragNodeRef.current = e.currentTarget;
+    e.dataTransfer.effectAllowed = "move";
+    requestAnimationFrame(() => {
+      if (dragNodeRef.current) {
+        dragNodeRef.current.style.opacity = "0.4";
+      }
+    });
+  };
+
+  const handleDragOver = (index: number, e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (dragIndex === null || dragIndex === index) return;
+    setDragOverIndex(index);
+  };
+
+  const handleDragEnd = async () => {
+    if (dragNodeRef.current) {
+      dragNodeRef.current.style.opacity = "1";
+    }
+
+    if (dragIndex !== null && dragOverIndex !== null && dragIndex !== dragOverIndex) {
+      const reordered = [...projectsList];
+      const [moved] = reordered.splice(dragIndex, 1);
+      reordered.splice(dragOverIndex, 0, moved);
+
+      setProjectsList(reordered);
+
+      const updates = reordered.map((project, i) => ({
+        id: project.id,
+        sort_order: i,
+      }));
+
+      for (const update of updates) {
+        await supabase
+          .from("projects")
+          .update({ sort_order: update.sort_order })
+          .eq("id", update.id);
+      }
+
+      showToast("Order updated successfully");
+    }
+
+    setDragIndex(null);
+    setDragOverIndex(null);
+    dragNodeRef.current = null;
+  };
+
   const fetchProjects = async () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("projects")
       .select("*")
-      .order("updated_at", { ascending: false });
+      .order("sort_order", { ascending: true });
 
     if (error) {
       console.error("Error fetching projects:", error);
@@ -163,6 +222,7 @@ export default function AdminProjectsPage() {
       action: formData.action,
       reverse: formData.reverse,
       slug: formData.title.toLowerCase().replace(/\s+/g, "-"),
+      sort_order: isCreating ? projectsList.length : undefined,
     };
 
     if (isCreating) {
@@ -387,54 +447,70 @@ export default function AdminProjectsPage() {
         )}
       </AnimatePresence>
 
-      {/* Projects List */}
-      <div className="space-y-4">
+      {/* Projects List — Drag & Drop Enabled */}
+      <div className="space-y-3">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-white/20">
             <Loader2 className="w-12 h-12 animate-spin" />
             <p className="font-medium tracking-widest uppercase text-xs">Fetching projects...</p>
           </div>
         ) : projectsList.length > 0 ? (
-          projectsList.map((project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/[0.07] transition-all duration-300 group"
-            >
-              <div className="flex items-center gap-4 min-w-0 flex-1">
-                <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center shrink-0">
-                  <FolderKanban className="w-6 h-6 text-neon-blue" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-white font-bold text-lg truncate">{project.title}</p>
-                  <p className="text-white/40 text-sm mt-1 truncate">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-white/50">
-                        {tag}
-                      </span>
-                    ))}
+          <>
+            <p className="text-xs text-white/30 font-medium tracking-widest uppercase mb-2 flex items-center gap-2">
+              <GripVertical className="w-3.5 h-3.5" />
+              Drag to reorder
+            </p>
+            {projectsList.map((project, i) => (
+              <div
+                key={project.id}
+                draggable
+                onDragStart={(e) => handleDragStart(i, e)}
+                onDragOver={(e) => handleDragOver(i, e)}
+                onDragEnd={handleDragEnd}
+                onDragLeave={() => setDragOverIndex(null)}
+                className={`bg-white/5 border rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all duration-300 group select-none ${
+                  dragOverIndex === i && dragIndex !== i
+                    ? "border-neon-blue/50 bg-neon-blue/5 scale-[1.01]"
+                    : "border-white/10 hover:bg-white/[0.07]"
+                }`}
+              >
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  {/* Drag Handle */}
+                  <div className="cursor-grab active:cursor-grabbing shrink-0 p-1 -ml-1 text-white/20 hover:text-white/50 transition-colors">
+                    <GripVertical className="w-5 h-5" />
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center shrink-0">
+                    <FolderKanban className="w-6 h-6 text-neon-blue" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-white font-bold text-lg truncate">{project.title}</p>
+                    <p className="text-white/40 text-sm mt-1 truncate">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-white/50">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleEdit(project)}
+                    className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-neon-blue hover:bg-neon-blue/10 transition-all duration-300"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(project)}
+                    className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-red-400 hover:bg-red-400/10 transition-all duration-300"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => handleEdit(project)}
-                  className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-neon-blue hover:bg-neon-blue/10 transition-all duration-300"
-                >
-                  <Pencil className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleDelete(project)}
-                  className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-red-400 hover:bg-red-400/10 transition-all duration-300"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </motion.div>
-          ))
+            ))}
+          </>
         ) : (
           <div className="text-center py-24 text-white/20 border-2 border-dashed border-white/5 rounded-3xl">
             <ImageIcon className="w-12 h-12 mx-auto mb-4 opacity-50" />

@@ -14,7 +14,7 @@ export async function getPortfolioData() {
     { data: contactInfo },
     { data: certifications }
   ] = await Promise.all([
-    supabase.from("projects").select("*").order("updated_at", { ascending: false }),
+    supabase.from("projects").select("*").order("sort_order", { ascending: true }),
     supabase.from("skills").select("*").order("sort_order", { ascending: true }),
     supabase.from("education").select("*").order("sort_order", { ascending: true }),
     supabase.from("experience").select("*").order("sort_order", { ascending: true }),

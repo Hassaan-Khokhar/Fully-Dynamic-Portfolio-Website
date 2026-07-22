@@ -98,7 +98,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto" style={{ overscrollBehaviorY: "contain" }} data-lenis-prevent="true">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (

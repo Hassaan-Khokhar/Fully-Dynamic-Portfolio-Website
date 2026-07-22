@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Pencil, Trash2, X, Save, Briefcase, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Save, Briefcase, Loader2, GripVertical } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ExperienceItem } from "@/data/experience";
 import { useToast } from "@/components/Toast";
@@ -18,6 +18,11 @@ export default function AdminExperiencePage() {
   const { showToast } = useToast();
   const [form, setForm] = useState<ExperienceItem>(empty);
 
+  // Drag-and-drop state
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const dragNodeRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     fetchExperience();
   }, []);
@@ -32,6 +37,60 @@ export default function AdminExperiencePage() {
     setLoading(false);
   };
 
+  // ═══════════════════════════════════════════
+  // Drag & Drop Handlers
+  // ═══════════════════════════════════════════
+
+  const handleDragStart = (index: number, e: React.DragEvent<HTMLDivElement>) => {
+    setDragIndex(index);
+    dragNodeRef.current = e.currentTarget;
+    e.dataTransfer.effectAllowed = "move";
+    requestAnimationFrame(() => {
+      if (dragNodeRef.current) {
+        dragNodeRef.current.style.opacity = "0.4";
+      }
+    });
+  };
+
+  const handleDragOver = (index: number, e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (dragIndex === null || dragIndex === index) return;
+    setDragOverIndex(index);
+  };
+
+  const handleDragEnd = async () => {
+    if (dragNodeRef.current) {
+      dragNodeRef.current.style.opacity = "1";
+    }
+
+    if (dragIndex !== null && dragOverIndex !== null && dragIndex !== dragOverIndex) {
+      const reordered = [...items];
+      const [moved] = reordered.splice(dragIndex, 1);
+      reordered.splice(dragOverIndex, 0, moved);
+
+      setItems(reordered);
+
+      const updates = reordered.map((item, i) => ({
+        id: item.id,
+        sort_order: i,
+      }));
+
+      for (const update of updates) {
+        await supabase
+          .from("experience")
+          .update({ sort_order: update.sort_order })
+          .eq("id", update.id);
+      }
+
+      showToast("Order updated successfully");
+    }
+
+    setDragIndex(null);
+    setDragOverIndex(null);
+    dragNodeRef.current = null;
+  };
+
   const handleEdit = (item: ExperienceItem) => { setEditing(item); setForm(item); setIsCreating(false); };
   const handleCreate = () => { setIsCreating(true); setEditing(null); setForm(empty); };
   const handleCancel = () => { setEditing(null); setIsCreating(false); setForm(empty); };
@@ -44,6 +103,7 @@ export default function AdminExperiencePage() {
       company: form.company,
       bullets: form.bullets,
       active: form.active,
+      sort_order: isCreating ? items.length : undefined,
     };
 
     if (isCreating) {
@@ -102,26 +162,54 @@ export default function AdminExperiencePage() {
         )}
       </AnimatePresence>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {loading ? (
           <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-white/20" /></div>
-        ) : (
-          items.map((item, i) => (
-            <motion.div key={item.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:bg-white/[0.07] transition-all duration-300">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-purple/10 flex items-center justify-center"><Briefcase className="w-6 h-6 text-neon-purple" /></div>
-                <div>
-                  <div className="flex items-center gap-3"><p className="text-white font-bold text-lg">{item.role}</p>{item.active && <span className="px-2 py-0.5 rounded-full text-xs bg-neon-purple/20 text-neon-purple font-bold">Active</span>}</div>
-                  <p className="text-neon-blue text-sm mt-1">{item.company}</p>
-                  <p className="text-white/40 text-sm">{item.year}</p>
+        ) : items.length > 0 ? (
+          <>
+            <p className="text-xs text-white/30 font-medium tracking-widest uppercase mb-2 flex items-center gap-2">
+              <GripVertical className="w-3.5 h-3.5" />
+              Drag to reorder
+            </p>
+            {items.map((item, i) => (
+              <div
+                key={item.id}
+                draggable
+                onDragStart={(e) => handleDragStart(i, e)}
+                onDragOver={(e) => handleDragOver(i, e)}
+                onDragEnd={handleDragEnd}
+                onDragLeave={() => setDragOverIndex(null)}
+                className={`bg-white/5 border rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group transition-all duration-300 select-none ${
+                  dragOverIndex === i && dragIndex !== i
+                    ? "border-neon-blue/50 bg-neon-blue/5 scale-[1.01]"
+                    : "border-white/10 hover:bg-white/[0.07]"
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  {/* Drag Handle */}
+                  <div className="cursor-grab active:cursor-grabbing shrink-0 p-1 -ml-1 text-white/20 hover:text-white/50 transition-colors">
+                    <GripVertical className="w-5 h-5" />
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-neon-purple/10 flex items-center justify-center"><Briefcase className="w-6 h-6 text-neon-purple" /></div>
+                  <div>
+                    <div className="flex items-center gap-3"><p className="text-white font-bold text-lg">{item.role}</p>{item.active && <span className="px-2 py-0.5 rounded-full text-xs bg-neon-purple/20 text-neon-purple font-bold">Active</span>}</div>
+                    <p className="text-neon-blue text-sm mt-1">{item.company}</p>
+                    <p className="text-white/40 text-sm">{item.year}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => handleEdit(item)} className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-neon-blue hover:bg-neon-blue/10 transition-all duration-300"><Pencil className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(item.id)} className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-red-400 hover:bg-red-400/10 transition-all duration-300"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <button onClick={() => handleEdit(item)} className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-neon-blue hover:bg-neon-blue/10 transition-all duration-300"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(item.id)} className="p-3 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-red-400 hover:bg-red-400/10 transition-all duration-300"><Trash2 className="w-4 h-4" /></button>
-              </div>
-            </motion.div>
-          ))
+            ))}
+          </>
+        ) : (
+          <div className="text-center py-24 text-white/20 border-2 border-dashed border-white/5 rounded-3xl">
+            <Briefcase className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <p className="text-lg font-medium">No experience roles yet</p>
+            <p className="text-sm">Add your first role above.</p>
+          </div>
         )}
       </div>
     </div>

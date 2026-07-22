@@ -156,7 +156,10 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
         >
           {/* FRONT OF CARD */}
           <div
-            style={{ backfaceVisibility: "hidden" }}
+            style={{ 
+              backfaceVisibility: "hidden",
+              pointerEvents: isFlipped ? "none" : "auto"
+            }}
             className={`absolute inset-0 w-full h-full rounded-2xl border-2 border-[var(--glass-border-color)] bg-[var(--surface-color)] overflow-hidden transition-all duration-500 ${isHovered ? "shadow-[0_0_50px_rgba(59,130,246,0.2)] border-[var(--glass-border-color)]" : "shadow-[0_8px_30px_var(--glass-shadow-color)]"}`}
           >
             {hasFile ? (
@@ -247,7 +250,9 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
           <div
             style={{ 
               backfaceVisibility: "hidden", 
-              transform: "rotateY(180deg) translateZ(1px)" 
+              transform: "rotateY(180deg) translateZ(1px)",
+              pointerEvents: isFlipped ? "auto" : "none",
+              zIndex: isFlipped ? 50 : 0
             }}
             className="absolute inset-0 w-full h-full rounded-2xl border border-[var(--glass-border-color)] bg-[var(--surface-color)] p-8 flex flex-col justify-center items-center text-center shadow-[0_0_50px_rgba(59,130,246,0.1)]"
           >
@@ -269,7 +274,10 @@ function VaultCard({ cert, index }: { cert: Certification; index: number }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="interactive-element flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--fg-color)] text-[var(--bg-color)] font-bold hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:scale-105 transition-all duration-300 w-full justify-center"
+                onPointerDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                className="relative z-50 interactive-element flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--fg-color)] text-[var(--bg-color)] font-bold hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:scale-105 transition-all duration-300 w-full justify-center"
               >
                 Verify on {cert.issuer}
                 <ExternalLink className="w-4 h-4" />
