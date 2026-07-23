@@ -46,15 +46,30 @@ create table if not exists public.education (
   sort_order int default 0
 );
 
--- 4. EXPERIENCE TABLE
+-- 4. EXPERIENCE TABLE (company-level)
 create table if not exists public.experience (
   id uuid default gen_random_uuid() primary key,
   year text not null,
   role text not null,
   company text not null,
+  location text default '',
   bullets text[] default '{}',
   active boolean default false,
   sort_order int default 0
+);
+
+-- 4b. EXPERIENCE ROLES TABLE (role-level, linked to experience)
+create table if not exists public.experience_roles (
+  id uuid default gen_random_uuid() primary key,
+  experience_id uuid not null references public.experience(id) on delete cascade,
+  title text not null,
+  start_date text not null default '',
+  end_date text default 'Present',
+  description text default '',
+  bullets text[] default '{}',
+  is_current boolean default false,
+  sort_order int default 0,
+  created_at timestamptz default now()
 );
 
 -- 5. CONTACT INFO TABLE (single row)
@@ -91,6 +106,7 @@ alter table public.projects enable row level security;
 alter table public.skills enable row level security;
 alter table public.education enable row level security;
 alter table public.experience enable row level security;
+alter table public.experience_roles enable row level security;
 alter table public.contact_info enable row level security;
 alter table public.messages enable row level security;
 
@@ -99,6 +115,7 @@ create policy "Public read projects" on public.projects for select using (true);
 create policy "Public read skills" on public.skills for select using (true);
 create policy "Public read education" on public.education for select using (true);
 create policy "Public read experience" on public.experience for select using (true);
+create policy "Public read experience_roles" on public.experience_roles for select using (true);
 create policy "Public read contact_info" on public.contact_info for select using (true);
 
 -- Public can INSERT messages (contact form)
@@ -109,6 +126,7 @@ create policy "Admin all projects" on public.projects for all using (auth.role()
 create policy "Admin all skills" on public.skills for all using (auth.role() = 'authenticated');
 create policy "Admin all education" on public.education for all using (auth.role() = 'authenticated');
 create policy "Admin all experience" on public.experience for all using (auth.role() = 'authenticated');
+create policy "Admin all experience_roles" on public.experience_roles for all using (auth.role() = 'authenticated');
 create policy "Admin all contact_info" on public.contact_info for all using (auth.role() = 'authenticated');
 create policy "Admin all messages" on public.messages for all using (auth.role() = 'authenticated');
 

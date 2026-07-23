@@ -1,7 +1,7 @@
 import { Project } from "@/data/projects";
 import { SkillCategory } from "@/data/skills";
 import { EducationItem } from "@/data/education";
-import { ExperienceItem } from "@/data/experience";
+import { ExperienceItem, ExperienceRole } from "@/data/experience";
 import { Certification } from "@/data/certifications";
 import { supabase } from "./supabase";
 
@@ -11,6 +11,7 @@ export async function getPortfolioData() {
     { data: skills },
     { data: education },
     { data: experience },
+    { data: experienceRoles },
     { data: contactInfo },
     { data: certifications }
   ] = await Promise.all([
@@ -18,6 +19,7 @@ export async function getPortfolioData() {
     supabase.from("skills").select("*").order("sort_order", { ascending: true }),
     supabase.from("education").select("*").order("sort_order", { ascending: true }),
     supabase.from("experience").select("*").order("sort_order", { ascending: true }),
+    supabase.from("experience_roles").select("*").order("sort_order", { ascending: true }),
     supabase.from("contact_info").select("*").single(),
     supabase.from("certifications").select("*").order("sort_order", { ascending: true }),
   ]);
@@ -47,7 +49,33 @@ export async function getPortfolioData() {
       className: s.class_name,
     })),
     education: (education || []) as EducationItem[],
-    experience: (experience || []) as ExperienceItem[],
+    experience: (experience || []).map((e): ExperienceItem => {
+      const roles: ExperienceRole[] = (experienceRoles || [])
+        .filter((r: any) => r.experience_id === e.id)
+        .map((r: any): ExperienceRole => ({
+          id: r.id,
+          experience_id: r.experience_id,
+          title: r.title,
+          start_date: r.start_date,
+          end_date: r.end_date,
+          description: r.description,
+          bullets: r.bullets || [],
+          is_current: r.is_current,
+          sort_order: r.sort_order,
+        }));
+
+      return {
+        id: e.id,
+        company: e.company,
+        location: e.location || "",
+        roles,
+        // Legacy fields for backward compatibility
+        year: e.year,
+        role: e.role,
+        bullets: e.bullets || [],
+        active: e.active,
+      };
+    }),
     contactInfo: contactInfo || { 
       first_name: "HASSAAN",
       last_name: "Ali",
